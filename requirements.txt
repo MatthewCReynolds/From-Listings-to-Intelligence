@@ -1,0 +1,11 @@
+# pyarrow 19 cannot read these files (written by Arrow 24):
+# "Repetition level histogram size mismatch"
+pyarrow>=20
+duckdb
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+jupyter
+ipykernel

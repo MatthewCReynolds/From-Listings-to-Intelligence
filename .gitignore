@@ -1,0 +1,14 @@
+# Data files — too large for git (869 MB zip, 1.6 GB unpacked)
+data/*
+!data/.gitkeep
+!data/README.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
