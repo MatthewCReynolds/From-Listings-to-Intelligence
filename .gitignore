@@ -2,6 +2,7 @@
 data/*
 !data/.gitkeep
 !data/README.md
+!data/master_columns.csv
 
 # Python
 __pycache__/
