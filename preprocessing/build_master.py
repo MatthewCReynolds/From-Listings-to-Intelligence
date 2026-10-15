@@ -230,11 +230,14 @@ def main() -> int:
     dupes = {n for n in names if names.count(n) > 1}
     assert not dupes, f"duplicate output columns: {sorted(dupes)}"
 
+    # Joined outside the f-string: a backslash in an f-string expression is a
+    # SyntaxError before Python 3.12.
+    selects = ",\n        ".join(b.selects)
     sql = f"""
     WITH {PRICE_AGG.strip()},
     {CONCESSION_AGG.strip()}
     SELECT
-        {",\n        ".join(b.selects)}
+        {selects}
     FROM market.unit u
     LEFT JOIN truth.lease_event le             ON le.unit_id = u.unit_id
     LEFT JOIN market.floor_plan fp             ON fp.floor_plan_id = u.floor_plan_id
