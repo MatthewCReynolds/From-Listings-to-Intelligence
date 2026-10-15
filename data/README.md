@@ -37,6 +37,7 @@ generator machine's absolute paths. `build_duckdb.py` regenerates them against l
 
 ```bash
 python preprocessing/build_master.py     # ~15 s -> data/master_listing.parquet (161 MB)
+python preprocessing/standardize_types.py              # Standardize dtypes -> update master_columns.csv
 ```
 
 `data/master_listing.parquet` — **one row per listing episode** (`market/unit`), 967,661 rows x 378 columns.
