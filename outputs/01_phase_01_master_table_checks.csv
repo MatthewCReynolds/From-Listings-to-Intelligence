@@ -1,0 +1,60 @@
+section,check,expected,observed,pass
+grain,rows == listings in market.unit,967661,967661,True
+grain,duplicate unit_id,0,0,True
+grain,null join keys,0,0,True
+grain,master keys not in market.unit,0,0,True
+grain,market.unit listings not in master,0,0,True
+fan-out,duplicate (unit_id) in truth.lease_event,0,0,True
+fan-out,duplicate (floor_plan_id) in market.floor_plan,0,0,True
+fan-out,duplicate (property_id) in market.building,0,0,True
+fan-out,duplicate (property_id) in truth.building_params,0,0,True
+fan-out,"duplicate (property_id, ""As of Day"") in market.leasing_activity_daily",0,0,True
+fan-out,"duplicate (floor_plan_id, month) in truth.floorplan_market_rent_monthly",0,0,True
+fan-out,duplicate (property_id) in pms.property,0,0,True
+coverage,truth.lease_event: matched but empty,0,0,True
+coverage,truth.lease_event: unmatched but filled,0,0,True
+coverage,market.floor_plan: matched but empty,0,0,True
+coverage,market.floor_plan: unmatched but filled,0,0,True
+coverage,market.building: matched but empty,0,0,True
+coverage,market.building: unmatched but filled,0,0,True
+coverage,truth.building_params: matched but empty,0,0,True
+coverage,truth.building_params: unmatched but filled,0,0,True
+coverage,market.price_observation: matched but empty,0,0,True
+coverage,market.price_observation: unmatched but filled,0,0,True
+coverage,market.concession_event: matched but empty,0,0,True
+coverage,market.concession_event: unmatched but filled,0,0,True
+coverage,truth.concession: matched but empty,0,0,True
+coverage,truth.concession: unmatched but filled,0,0,True
+coverage,market.leasing_activity_daily: matched but empty,0,0,True
+coverage,market.leasing_activity_daily: unmatched but filled,0,0,True
+coverage,truth.floorplan_market_rent_monthly: matched but empty,0,0,True
+coverage,truth.floorplan_market_rent_monthly: unmatched but filled,0,0,True
+coverage,pms.property: matched but empty,0,0,True
+coverage,pms.property: unmatched but filled,0,0,True
+coverage,market.leasing_activity_daily: unmatched not explained by date window,0,0,True
+coverage,truth.floorplan_market_rent_monthly: unmatched not explained by date window,0,0,True
+keys,lease_event.property_id != unit,0,0,True
+keys,lease_event.floor_plan_id != unit,0,0,True
+keys,lease_event.market != unit,0,0,True
+keys,floor_plan.property_id != unit,0,0,True
+keys,floor_plan.market != unit,0,0,True
+keys,building.market != unit,0,0,True
+keys,building_params.market != unit,0,0,True
+keys,price_observation.property_id != unit,0,0,True
+keys,concession_event.property_id != unit,0,0,True
+keys,floorplan_market_rent.property_id != unit,0,0,True
+keys,pms_property__is_pms != truth_building_params__is_pms,0,0,True
+values,market_unit__enter_market differs from source,0,0,True
+values,truth_lease_event__true_rent differs from source,0,0,True
+values,truth_lease_event__outcome differs from source,0,0,True
+values,market_floor_plan__unit_count differs from source,0,0,True
+values,market_building__year_built differs from source,0,0,True
+values,truth_building_params__quality_true differs from source,0,0,True
+values,market_price_observation__n_windows differs from source,0,0,True
+values,market_price_observation__max_asking_rent differs from source,0,0,True
+values,market_concession_event__n_events differs from source,0,0,True
+values,market_leasing_activity_daily__leased_pct_at_enter differs from source,0,0,True
+values,truth_floorplan_market_rent__true_market_rent_at_enter differs from source,0,0,True
+values,pms_property__sid differs from source,0,0,True
+catalog,catalog columns != parquet columns (name and order),0,0,True
+catalog,columns with an unknown role,0,0,True

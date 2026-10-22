@@ -1,0 +1,109 @@
+variable,source_table,completeness_pct,emptiness_pct,type,role,x_status
+market_unit__bed,market_unit,100.0,0.0,number,feature,candidate
+market_unit__bath,market_unit,100.0,0.0,number,feature,candidate
+market_unit__partial_bath,market_unit,100.0,0.0,number,feature,candidate
+market_unit__floor,market_unit,50.7,49.3,number,feature,candidate
+market_unit__sqft,market_unit,95.67,4.33,number,feature,candidate
+market_unit__days_on_market,market_unit,100.0,0.0,number,feature,excluded: explicit column
+truth_lease_event__true_term_months,truth_lease_event,96.29,3.71,number,label,excluded: role label
+truth_lease_event__true_rent,truth_lease_event,96.29,3.71,number,label,excluded: role label
+truth_lease_event__true_concession_monthly,truth_lease_event,96.29,3.71,number,label,excluded: role label
+truth_lease_event__true_effective_rent,truth_lease_event,96.29,3.71,number,label,excluded: role label
+truth_lease_event__inferred_term_months,truth_lease_event,96.29,3.71,number,inferred,excluded: truth_ prefix
+truth_lease_event__true_market_rent_at_signing,truth_lease_event,96.29,3.71,number,label,excluded: role label
+market_floor_plan__unit_count,market_floor_plan,100.0,0.0,number,feature,candidate
+market_building__lat,market_building,100.0,0.0,number,feature,candidate
+market_building__lon,market_building,100.0,0.0,number,feature,candidate
+market_building__number_units,market_building,93.81,6.19,number,feature,candidate
+market_building__year_built,market_building,89.22,10.78,number,feature,candidate
+market_building__number_stories,market_building,72.39,27.61,number,feature,candidate
+market_building__cats_monthly_rent,market_building,45.08,54.92,number,feature,candidate
+market_building__cats_one_time_fee,market_building,34.0,66.0,number,feature,candidate
+market_building__cats_deposit,market_building,29.51,70.49,number,feature,candidate
+market_building__dogs_monthly_rent,market_building,42.65,57.35,number,feature,candidate
+market_building__dogs_one_time_fee,market_building,35.34,64.66,number,feature,candidate
+market_building__dogs_deposit,market_building,31.29,68.71,number,feature,candidate
+market_building__admin_fee,market_building,49.8,50.2,number,feature,candidate
+market_building__amenity_fee,market_building,28.25,71.75,number,feature,candidate
+market_building__application_fee,market_building,68.42,31.58,number,feature,candidate
+market_building__storage_fee,market_building,10.7,89.3,number,feature,candidate
+market_building__parking_covered,market_building,29.25,70.75,number,feature,candidate
+market_building__parking_garage,market_building,13.96,86.04,number,feature,candidate
+market_building__parking_surface_lot,market_building,30.13,69.87,number,feature,candidate
+market_building__overall_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__bedroom_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__kitchen_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__bathroom_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__dining_room_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__common_areas_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__fitness_center_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__laundry_room_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__living_room_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__main_entrance_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__stairs_hallway_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__swimming_pool_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__walk_in_closet_quality_score,market_building,0.0,100.0,number,feature,excluded: empty
+market_building__avg_price_duration_days,market_building,100.0,0.0,number,feature,candidate
+market_building__avg_price_change,market_building,100.0,0.0,number,feature,candidate
+market_building__avg_time_on_market_days,market_building,99.99,0.01,number,feature,candidate
+market_building__count_prices,market_building,100.0,0.0,number,feature,candidate
+market_building__count_reviews,market_building,100.0,0.0,number,feature,candidate
+market_building__avg_review_score,market_building,100.0,0.0,number,feature,candidate
+market_building__positive_staff_and_management,market_building,100.0,0.0,number,feature,candidate
+market_building__negative_staff_and_management,market_building,100.0,0.0,number,feature,candidate
+market_building__positive_amenities_and_features,market_building,100.0,0.0,number,feature,candidate
+market_building__negative_amenities_and_features,market_building,100.0,0.0,number,feature,candidate
+market_building__positive_cleanliness_and_maintenance,market_building,100.0,0.0,number,feature,candidate
+market_building__negative_cleanliness_and_maintenance,market_building,100.0,0.0,number,feature,candidate
+market_building__positive_location,market_building,100.0,0.0,number,feature,candidate
+market_building__negative_location,market_building,100.0,0.0,number,feature,candidate
+market_building__positive_value,market_building,100.0,0.0,number,feature,candidate
+market_building__negative_value,market_building,100.0,0.0,number,feature,candidate
+market_building__n_building_amenities,market_building,82.79,17.21,number,feature,candidate
+market_building__n_unit_amenities,market_building,82.79,17.21,number,feature,candidate
+truth_building_params__quality_true,truth_building_params,100.0,0.0,number,latent,excluded: role latent
+truth_building_params__amenity_score,truth_building_params,100.0,0.0,number,latent,excluded: role latent
+truth_building_params__price_bias,truth_building_params,100.0,0.0,number,latent,excluded: role latent
+truth_building_params__elasticity,truth_building_params,100.0,0.0,number,latent,excluded: role latent
+truth_building_params__eps_building,truth_building_params,100.0,0.0,number,latent,excluded: role latent
+truth_building_params__number_units_true,truth_building_params,100.0,0.0,number,latent,excluded: role latent
+truth_building_params__year_built_true,truth_building_params,100.0,0.0,number,latent,excluded: role latent
+truth_building_params__number_stories_true,truth_building_params,100.0,0.0,number,latent,excluded: role latent
+truth_building_params__lead_base_rate,truth_building_params,5.39,94.61,number,latent,excluded: role latent
+market_price_observation__n_windows,market_price_observation,99.96,0.04,number,feature,excluded: market_price_observation__ prefix
+market_price_observation__n_price_changes,market_price_observation,99.96,0.04,number,feature,excluded: market_price_observation__ prefix
+market_price_observation__first_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__last_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__min_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__max_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__day_weighted_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__first_effective_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__last_effective_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__day_weighted_effective_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__first_asking_rent_psf,market_price_observation,95.63,4.37,number,leaky,excluded: role leaky
+market_price_observation__last_asking_rent_psf,market_price_observation,95.63,4.37,number,leaky,excluded: role leaky
+market_price_observation__max_concession,market_price_observation,99.96,0.04,number,feature,excluded: market_price_observation__ prefix
+market_price_observation__day_weighted_concession,market_price_observation,99.96,0.04,number,feature,excluded: market_price_observation__ prefix
+market_price_observation__share_days_with_concession,market_price_observation,99.96,0.04,number,feature,excluded: market_price_observation__ prefix
+market_price_observation__leased_asking_rent,market_price_observation,96.25,3.75,number,leaky,excluded: role leaky
+market_price_observation__leased_effective_rent,market_price_observation,96.25,3.75,number,leaky,excluded: role leaky
+market_price_observation__leased_asking_rent_psf,market_price_observation,92.07,7.93,number,leaky,excluded: role leaky
+market_price_observation__leased_effective_rent_psf,market_price_observation,92.07,7.93,number,leaky,excluded: role leaky
+market_price_observation__leased_concession,market_price_observation,96.25,3.75,number,feature,excluded: market_price_observation__ prefix
+market_concession_event__n_events,market_concession_event,7.41,92.59,number,feature,excluded: market_concession_event__ prefix
+market_concession_event__n_days_advertised,market_concession_event,7.41,92.59,number,feature,excluded: market_concession_event__ prefix
+market_concession_event__n_upfront_free_months,market_concession_event,7.41,92.59,number,feature,excluded: market_concession_event__ prefix
+market_concession_event__n_recurring_discount,market_concession_event,7.41,92.59,number,feature,excluded: market_concession_event__ prefix
+market_concession_event__n_one_time_credit,market_concession_event,7.41,92.59,number,feature,excluded: market_concession_event__ prefix
+market_concession_event__n_look_and_lease,market_concession_event,7.41,92.59,number,feature,excluded: market_concession_event__ prefix
+market_concession_event__n_unknown,market_concession_event,7.41,92.59,number,feature,excluded: market_concession_event__ prefix
+truth_concession__max_total_value,truth_concession,6.45,93.55,number,label,excluded: role label
+truth_concession__max_amortized_monthly,truth_concession,6.45,93.55,number,label,excluded: role label
+truth_concession__n_generic,truth_concession,7.41,92.59,number,label,excluded: role label
+truth_concession__n_net_effective,truth_concession,7.41,92.59,number,label,excluded: role label
+market_leasing_activity_daily__leased_pct_at_enter,market_leasing_activity_daily,90.49,9.51,number,feature,candidate
+market_leasing_activity_daily__exposure_pct_at_enter,market_leasing_activity_daily,90.49,9.51,number,feature,candidate
+truth_floorplan_market_rent__true_market_rent_at_enter,truth_floorplan_market_rent,98.58,1.42,number,label,excluded: role label
+truth_floorplan_market_rent__true_market_rent_psf_at_enter,truth_floorplan_market_rent,98.58,1.42,number,label,excluded: role label
+pms_property__num_available_vacant_units,pms_property,5.39,94.61,number,feature,excluded: pms_ prefix
+pms_property__num_available_notice_units,pms_property,5.39,94.61,number,feature,excluded: pms_ prefix
