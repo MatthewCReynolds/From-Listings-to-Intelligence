@@ -3,6 +3,7 @@
 pyarrow>=20
 duckdb
 pandas
+openpyxl
 numpy
 matplotlib
 seaborn
