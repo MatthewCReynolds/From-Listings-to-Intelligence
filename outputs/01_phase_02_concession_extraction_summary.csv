@@ -1,0 +1,12 @@
+slice,n,found_pct,basis_acc,amount_acc,term_acc,total_within_5pct,total_median_pct_err,slice_by
+all,77429,99.2,94.2,93.0,75.9,91.8,0.0,overall
+upfront_free_months,42670,98.6,89.5,87.3,76.1,90.1,0.0,type
+one_time_credit,15464,100.0,100.0,100.0,75.6,100.0,0.0,type
+recurring_discount,11564,100.0,100.0,100.0,75.7,82.0,0.0,type
+look_and_lease,7731,100.0,100.0,100.0,76.1,100.0,0.0,type
+marketing,31036,99.2,94.4,93.1,75.8,91.6,0.0,text_style
+terse,27050,99.2,93.9,92.8,76.4,92.1,0.0,text_style
+legalese,11623,99.3,93.8,92.5,75.7,91.6,0.0,text_style
+bullet,7720,99.1,95.3,94.2,75.1,92.2,0.0,text_style
+llm,69039,99.1,97.6,96.8,75.9,93.9,0.0,text_source
+grammar,8390,100.0,66.1,61.9,76.1,75.1,0.0,text_source
