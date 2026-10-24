@@ -98,7 +98,7 @@ Done so far:
 | Completeness and type of all 378 variables | `notebooks/phase_01_market_rent/02_feature_funnel.ipynb` |
 | Feature scoring: Gini, gradient boosting, Lasso | `notebooks/phase_01_market_rent/03_feature_selection_numerical.ipynb` |
 | Correlations and redundant pairs, Excel report | `notebooks/phase_01_market_rent/04_numerical_correlations.ipynb` |
-| Final numerical feature list and profile | `notebooks/phase_01_market_rent/05_numerical_final_selection.ipynb` |
+| Decision table for all 108 numerical variables (scores, correlations, suggested and user decisions), profile and plots of the kept ones | `notebooks/phase_01_market_rent/05_numerical_final_selection.ipynb` |
 | Numeric feature analysis | `preprocessing/analyze_numeric.py` (branch `shikha-edits`) |
 
 Still to fix before modeling:

@@ -72,7 +72,7 @@ truth_building_params__number_stories_true,truth_building_params,100.0,0.0,numbe
 truth_building_params__lead_base_rate,truth_building_params,5.39,94.61,number,latent,excluded: role latent
 market_price_observation__n_windows,market_price_observation,99.96,0.04,number,feature,excluded: market_price_observation__ prefix
 market_price_observation__n_price_changes,market_price_observation,99.96,0.04,number,feature,excluded: market_price_observation__ prefix
-market_price_observation__first_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
+market_price_observation__first_asking_rent,market_price_observation,99.96,0.04,number,leaky,target (y)
 market_price_observation__last_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
 market_price_observation__min_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
 market_price_observation__max_asking_rent,market_price_observation,99.96,0.04,number,leaky,excluded: role leaky
