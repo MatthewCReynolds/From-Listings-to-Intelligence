@@ -1,0 +1,37 @@
+variable,source_table,role,completeness_pct,n_levels,grain,n_entities,cardinality_ratio,top_level_share,x_status,reason
+market_unit__unit_name,market.unit,feature,89.16,2205,listing,106996,0.02061,0.0073,candidate,
+market_unit__floorplan_name,market.unit,feature,100.0,575,listing,120000,0.00479,0.0244,candidate,
+market_building__zip_code,market.building,feature,100.0,98,building,2982,0.03286,0.0375,candidate,
+market_building__management_company,market.building,feature,88.27,80,building,2580,0.03101,0.0395,candidate,
+market_building__submarket,market.building,feature,100.0,41,building,2982,0.01375,0.0857,candidate,
+market_building__city,market.building,feature,100.0,18,building,2982,0.00604,0.3646,candidate,
+market_building__state,market.building,feature,100.0,5,building,2982,0.00168,0.4955,candidate,
+market_building__msa,market.building,feature,100.0,3,building,2982,0.00101,0.4955,candidate,
+market_building__property_class,market.building,feature,100.0,3,building,2982,0.00101,0.42,candidate,
+market_building__number_stories_prediction,market.building,feature,100.0,3,building,2982,0.00101,0.4244,candidate,
+unit_id,market.unit,key,100.0,120000,listing,120000,1.0,0.0,excluded,join key
+market_unit__url,market.unit,feature,100.0,120000,listing,120000,1.0,0.0,excluded,"identifier (100% of 120,000 rows distinct)"
+truth_lease_event__physical_unit_id,truth.lease_event,label,100.0,103603,listing,120000,0.86336,0.0,excluded,"identifier (86% of 120,000 rows distinct)"
+floor_plan_id,market.unit,key,100.0,19502,listing,120000,0.16252,0.0009,excluded,join key
+market_concession_event__first_specials_text,market.concession_event,feature,7.44,8067,listing,8931,0.90326,0.0737,excluded,known only after the listing closes
+property_id,market.unit,key,100.0,2982,building,2982,1.0,0.0032,excluded,join key
+market_building__street_address,market.building,feature,100.0,2981,building,2982,0.99966,0.0032,excluded,"identifier (100% of 2,982 buildings distinct)"
+market_building__building_name,market.building,feature,96.59,2707,building,2867,0.94419,0.0033,excluded,"identifier (94% of 2,867 buildings distinct)"
+market_building__building_website,market.building,feature,84.96,2567,building,2567,1.0,0.0037,excluded,"identifier (100% of 2,567 buildings distinct)"
+truth_building_params__property_sid,truth.building_params,latent,5.33,150,building,150,1.0,0.0403,excluded,identifier (100% of 150 buildings distinct)
+pms_property__sid,pms.property,feature,5.33,150,building,150,1.0,0.0403,excluded,identifier (100% of 150 buildings distinct)
+pms_property__integration_sid,pms.property,feature,5.33,150,building,150,1.0,0.0403,excluded,identifier (100% of 150 buildings distinct)
+truth_building_params__firm_sid,truth.building_params,latent,100.0,80,building,2982,0.02683,0.0387,excluded,"role=latent, not known at prediction time"
+pms_property__firm_sid,pms.property,feature,5.33,56,building,150,0.37333,0.1147,excluded,identifier (37% of 150 buildings distinct)
+market_concession_event__first_type,market.concession_event,feature,7.44,5,listing,8931,0.00056,0.4686,excluded,known only after the listing closes
+truth_concession__first_type,truth.concession,label,7.44,5,listing,8931,0.00056,0.4686,excluded,"role=label, not known at prediction time"
+truth_building_params__product_type,truth.building_params,latent,100.0,4,building,2982,0.00134,0.8442,excluded,"role=latent, not known at prediction time"
+market,market.unit,key,100.0,3,building,2982,0.00101,0.4955,excluded,join key
+truth_building_params__property_class,truth.building_params,latent,100.0,3,building,2982,0.00101,0.42,excluded,"role=latent, not known at prediction time"
+truth_building_params__concession_appetite,truth.building_params,latent,100.0,3,building,2982,0.00101,0.4691,excluded,"role=latent, not known at prediction time"
+truth_building_params__rent_roll_grouping_key,truth.building_params,latent,100.0,3,building,2982,0.00101,0.5067,excluded,"role=latent, not known at prediction time"
+truth_building_params__building_form,truth.building_params,latent,100.0,3,building,2982,0.00101,0.4244,excluded,"role=latent, not known at prediction time"
+market_unit__status,market.unit,feature,100.0,2,listing,120000,2e-05,0.9629,excluded,known only after the listing closes
+truth_lease_event__outcome,truth.lease_event,label,100.0,2,listing,120000,2e-05,0.9629,excluded,"role=label, not known at prediction time"
+truth_building_params__pricing_policy,truth.building_params,latent,100.0,2,building,2982,0.00067,0.522,excluded,"role=latent, not known at prediction time"
+pms_property__integration_type,pms.property,feature,5.33,1,building,150,0.00667,1.0,excluded,constant
