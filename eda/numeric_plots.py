@@ -83,8 +83,9 @@ def p02_geo(df):
         g = d[d.market == m]
         hb = a.hexbin(g.lon, g.lat, C=g.rent, reduce_C_function=np.median, gridsize=35,
                       mincnt=5, cmap="magma", vmin=d.rent.quantile(.05), vmax=vmax)
-        a.set(title=f"{m.title()}: Median Rent", xlabel="Longitude", ylabel="Latitude")
-    fig.colorbar(hb, ax=ax, label="median rent $")
+        market_name = {"chicago": "Chicago" , "dc": "DC", "dfw": "DFW"}.get(m.lower(), m.title())
+        a.set(title=f"{market_name}: Median Rent", xlabel="Longitude", ylabel="Latitude")
+    fig.colorbar(hb, ax=ax, label="Median Rent ($)")
     fig.savefig(OUT / "02_geography.png", dpi=150); plt.close(fig); print("saved 02_geography.png")
 
 
@@ -112,7 +113,7 @@ def p04_within_between(df):
     d = d[d.sqft.between(*lim)]
     fig, ax = plt.subplots(1, 2, figsize=(12, 5))
     ax[0].hexbin(d.sqft, d.rent, gridsize=50, bins="log", cmap="viridis", mincnt=1)
-    ax[0].set(title=f"Raw: Pearson={d.sqft.corr(d.rent):.2f}", xlabel="sqft", ylabel="rent")
+    ax[0].set(title=f"Raw: Pearson={d.sqft.corr(d.rent):.2f}", xlabel="Sqft", ylabel="Rent")
     ax[1].hexbin(d.sqft_w, d.rent_w, gridsize=50, bins="log", cmap="viridis", mincnt=1)
     ax[1].set(title=f"Within property: Pearson={d.sqft_w.corr(d.rent_w):.2f}",
               xlabel="Sqft - Building Mean", ylabel="Rent - Building Mean")
@@ -127,8 +128,12 @@ def p05_pdp(df):
     gb = HistGradientBoostingRegressor(max_iter=200, learning_rate=0.1, random_state=SEED).fit(X.iloc[tr], d.rent.iloc[tr])
     show = ["sqft", "lat", "lon", "n_amen"]
     fig, ax = plt.subplots(2, 2, figsize=(11, 8))
-    PartialDependenceDisplay.from_estimator(gb, X.iloc[te].sample(min(5000, len(te)), random_state=SEED), show,
-                                            grid_resolution=25, ax=ax, line_kw={"color": "C3"})
+    PartialDependenceDisplay.from_estimator(
+    gb, X.iloc[te].sample(min(5000, len(te)), random_state=SEED), show,
+    grid_resolution=25, ax=ax, line_kw={"color": "C3"}
+    )
+    for a in ax.flat:
+        a.set_ylabel("Partial Dependence")
     fig.suptitle("Partial Dependence of Predicted Rent (Compact GBM, Holdout = Unseen Properties)")
     save(fig, "05_partial_dependence.png")
     print(f"  compact GBM holdout R2={gb.score(X.iloc[te], d.rent.iloc[te]):.3f}")
