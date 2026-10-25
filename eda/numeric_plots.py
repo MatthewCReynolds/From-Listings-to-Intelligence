@@ -69,7 +69,7 @@ def p01_sqft(df):
     hb = ax.hexbin(d.sqft, d.rent, gridsize=60, bins="log", mincnt=1, cmap="viridis")
     q = d.groupby(pd.cut(d.sqft, 25)).agg(x=("sqft", "median"), y=("rent", "median"))
     ax.plot(q.x, q.y, "r-", lw=2, label="binned median")
-    ax.set(xlabel="sqft", ylabel="rent", title="Rent vs sqft"); ax.legend()
+    ax.set(xlabel="Sqft", ylabel="Rent", title="Rent vs Sqft"); ax.legend()
     fig.colorbar(hb, ax=ax, label="log10 count")
     save(fig, "01_rent_vs_sqft.png")
 
@@ -83,7 +83,7 @@ def p02_geo(df):
         g = d[d.market == m]
         hb = a.hexbin(g.lon, g.lat, C=g.rent, reduce_C_function=np.median, gridsize=35,
                       mincnt=5, cmap="magma", vmin=d.rent.quantile(.05), vmax=vmax)
-        a.set(title=f"{m}: median rent", xlabel="lon", ylabel="lat")
+        a.set(title=f"{m}: Median Rent", xlabel="Longitude", ylabel="Latitude")
     fig.colorbar(hb, ax=ax, label="median rent $")
     fig.savefig(OUT / "02_geography.png", dpi=150); plt.close(fig); print("saved 02_geography.png")
 
@@ -99,7 +99,7 @@ def p03_building_level(df):
         d = pm.dropna(subset=[k])
         rho = d[k].corr(d.rent, method="spearman")
         a.scatter(d[k], d.rent, s=8, alpha=.4)
-        a.set(xlabel=label, ylabel="property mean rent", title=f"{label}  (building-level rho={rho:.2f}, n={len(d):,})")
+        a.set(xlabel=label, ylabel="Property Mean Rent", title=f"{label}  (building-level rho={rho:.2f}, n={len(d):,})")
     fig.suptitle("One point per building: building features can only carry ~#buildings worth of information")
     save(fig, "03_building_level.png")
 
@@ -115,7 +115,7 @@ def p04_within_between(df):
     ax[0].set(title=f"Raw: Pearson={d.sqft.corr(d.rent):.2f}", xlabel="sqft", ylabel="rent")
     ax[1].hexbin(d.sqft_w, d.rent_w, gridsize=50, bins="log", cmap="viridis", mincnt=1)
     ax[1].set(title=f"Within property: Pearson={d.sqft_w.corr(d.rent_w):.2f}",
-              xlabel="sqft minus building mean", ylabel="rent minus building mean")
+              xlabel="Sqft - Building Mean", ylabel="Rent - Building Mean")
     save(fig, "04_within_vs_between_sqft.png")
 
 
@@ -129,7 +129,7 @@ def p05_pdp(df):
     fig, ax = plt.subplots(2, 2, figsize=(11, 8))
     PartialDependenceDisplay.from_estimator(gb, X.iloc[te].sample(min(5000, len(te)), random_state=SEED), show,
                                             grid_resolution=25, ax=ax, line_kw={"color": "C3"})
-    fig.suptitle("Partial dependence of predicted rent (compact GBM, holdout = unseen properties)")
+    fig.suptitle("Partial Dependence of Predicted Rent (Compact GBM, Holdout = Unseen Properties)")
     save(fig, "05_partial_dependence.png")
     print(f"  compact GBM holdout R2={gb.score(X.iloc[te], d.rent.iloc[te]):.3f}")
 
