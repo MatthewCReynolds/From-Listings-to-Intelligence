@@ -83,7 +83,7 @@ def p02_geo(df):
         g = d[d.market == m]
         hb = a.hexbin(g.lon, g.lat, C=g.rent, reduce_C_function=np.median, gridsize=35,
                       mincnt=5, cmap="magma", vmin=d.rent.quantile(.05), vmax=vmax)
-        a.set(title=f"{m}: Median Rent", xlabel="Longitude", ylabel="Latitude")
+        a.set(title=f"{m.title()}: Median Rent", xlabel="Longitude", ylabel="Latitude")
     fig.colorbar(hb, ax=ax, label="median rent $")
     fig.savefig(OUT / "02_geography.png", dpi=150); plt.close(fig); print("saved 02_geography.png")
 
