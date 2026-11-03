@@ -1,0 +1,11 @@
+,eta_sq,eta_sq_null,eta_sq_excess,mi_coef,within_eta_sq,perm_dMAE
+market_building__property_class,0.3,0.0,0.3,0.61,0.0,178.8563
+market_building__zip_code,0.2821,0.0007,0.2814,0.6131,0.0,62.5579
+market_building__submarket,0.2281,0.0003,0.2278,0.547,0.0,26.3687
+market_unit__floorplan_name,0.111,0.0043,0.1067,0.5725,0.2255,23.2188
+market_unit__unit_name,0.1539,0.0213,0.1326,0.3582,0.2011,19.9778
+market_building__city,0.1953,0.0002,0.1951,0.4964,0.0,5.5398
+market_building__number_stories_prediction,0.0063,0.0,0.0063,0.1329,0.0,4.8733
+market_building__management_company,0.161,0.0008,0.1603,0.5075,0.0,3.7631
+market_building__state,0.1817,0.0,0.1817,0.4509,0.0,0.0167
+market_building__msa,0.172,0.0,0.172,0.4401,0.0,-0.2602
