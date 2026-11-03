@@ -1,0 +1,19 @@
+% Section 4. Suggested owner: Viviana.  Budget: ~1 page.
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Conclusion}
+\brief{Viviana}{~0.4 page}{%
+Three or four takeaways, each tied to a result in \cref{sec:results}: a defensible pipeline with
+leakage guarded by role; boosting halves the baseline's error on unseen buildings; the remaining
+error is missing information, not label noise; concession type is free and concession value is
+where the work is.}
+
+\subsection{Future work through April}
+\brief{Viviana}{~0.6 page}{%
+Each step justified by an observation. Comp selection and a similarity-weighted comp baseline,
+because the error is missing building information (\cref{sec:market-rent}). Ranges with tested
+coverage, through quantile models or conformal prediction \autocite{angelopoulos2023gentle}.
+Plain-language reasons from SHAP values \autocite{lundberg2017unified}. A time-based test on the
+latest months. Phase 2: the demand-conversion recommender. Moving the pipeline to the real Dwellsy
+extract, which shares the listing-and-unit structure but lacks the concession fields its
+documentation lists.}

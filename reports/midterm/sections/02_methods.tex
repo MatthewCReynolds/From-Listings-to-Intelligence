@@ -1,0 +1,106 @@
+% Section 2. Budget: ~3 pages.  Data + preprocessing drafted by Matthew.
+\section{Methods}\label{sec:methods}
+
+\subsection{Data}\label{sec:data}
+
+Following our sponsor's guidance, all analysis in this report uses a synthetic dataset built to
+mirror the listing feed Accolade will license.\footnote{In late October Accolade shared a trial
+extract from Dwellsy, the listing provider, covering \dwListings{} listings of \dwUnits{} rental
+units in the Chicago and Washington, DC metropolitan areas between \dwStart{} and \dwEnd{}. As
+advised, it is not used here.} The generator simulates \nBuildings{} apartment buildings in three
+markets, Chicago (\nChicago{}), Dallas--Fort Worth (\nDfw{}) and Washington, DC (\nDc{}), from
+\historyStart{} to \asOf{}, and writes \nSourceTables{} tables totalling \nSourceRowsM{} million
+rows in three layers (\cref{fig:layers}):
+
+\begin{description}[leftmargin=1.3em, labelindent=0pt, font=\sffamily\bfseries\small]
+  \item[Market] what a listings feed observes: buildings, floor plans, every listing with its dated
+  price changes, and the free-text specials advertised with them.
+  \item[Operator] full property-management records for \nPms{} buildings (leases, leads,
+  applications, and a reference system's daily price recommendations), used in Phase~2.
+  \item[Truth] the values the generator drew before observing anything: each floor plan's true
+  market rent by month, each listing's true lease, and each building's latent quality and pricing
+  policy.
+\end{description}
+
+The truth layer is what makes synthetic data worth using. A real feed records what landlords asked;
+this one also records what each unit was worth, so a method can be scored on whether it recovers
+the market rent rather than on whether it reproduces a noisy listing.
+
+The generator also builds in the difficulties real data will bring. Attributes are masked:
+\yearBuiltMasked{} of buildings lack a year built and \storiesMasked{} a story count. \nLeaseUp{}
+buildings are delivered mid-history and lease up from empty, \rmShare{} reprice daily under
+revenue management while the rest adjust by hand, \nVacancySpikes{} vacancy spikes disrupt
+individual buildings, and \nRentControlled{} buildings in DC are rent-controlled. Concessions
+appear in \nConcessionEvents{} specials written in varied prose. Each affects the analysis: masking
+makes completeness a selection criterion, lease-up and spikes produce listings priced away from
+the market, and concessions mean asking rent overstates what a tenant pays.
+
+One caution applies throughout. Because the generator builds rent from building attributes, a
+flexible model can score well partly by recovering the generator's own formula. We therefore read
+synthetic results as evidence that a method works when the data behaves as assumed, not as a
+forecast of accuracy on real listings.
+
+\figslot{layers}{the three data layers and which tables serve as answer keys}{1.35in}{Data-layer
+diagram, TikZ.}
+
+\subsection{Preprocessing: a master table without leaks}\label{sec:preprocessing}
+
+We joined the \nMasterTables{} source tables a rent model can draw on into one master table with
+a row per listing: \nMasterRows{} listings by \nMasterCols{} columns. Building and floor-plan
+attributes join one-to-many; a listing's price history and advertised specials are aggregated to
+the listing. Every join is checked for row fan-out, and every column carries its source in its name
+(\texttt{market\_building\_\_year\_built}), so provenance survives any later selection.
+
+A name does not say whether a column may be used, so each column also carries a role (feature,
+label, latent or leaky), and inputs are selected by role under one rule: an input must be known on
+the day the unit is listed. \Cref{fig:leakage} shows why that rule has to be enforced by role
+rather than by correlation. Nine columns are the listing's own later prices and correlate with
+asking rent at \(|r| \geq \minLeakyLevelR\); they are easy to catch. Four more are the same prices
+per square foot, at \(|r| \approx \psfAloneR\), no higher than the best legitimate feature. A
+correlation screen would keep them, yet multiplied by square footage they reproduce asking rent to
+within 1\% in \psfExactShare{} of \nPsfRows{} listings (\(r = \psfTimesSqftR\)). A model given them
+would score almost perfectly and learn nothing~\autocite{kaufman2012leakage}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics{leakage}
+  \caption{Correlation of every numeric column with asking rent, by role. Features known when a
+  unit is listed (blue) reach \(|r| = \maxFeatureR\). The listing's own later prices (red) are
+  leaks: nine rent columns are obvious, but four prices per square foot (open circles) fall in the
+  shaded band beside the best feature, where correlation cannot tell them apart. Grey points are
+  the generator's answer keys, never used as inputs.}
+  \label{fig:leakage}
+\end{figure}
+
+\subsection{Exploratory data analysis}\label{sec:eda}
+\brief{Shikha}{~0.75 page}{%
+Two or three findings that changed a decision, each with its figure; not a tour. Candidates from
+\texttt{eda/plots}: rent against square footage; building-level features carry only about 3,000 independent observations however
+many listings repeat them; same-unit rent changes over time. Figures are regenerated in the report
+style through \texttt{scripts/figures.py}; send Matthew the data, not the PNG.}
+
+\figslot{eda}{the EDA finding that most shaped modeling}{1.9in}{EDA figure, Shikha.}
+
+\subsection{Feature selection}\label{sec:selection}
+\brief{Viviana, Lady, Matthew}{~0.5 page}{%
+The funnel from \nMasterCols{} columns to the model's inputs: completeness, role, then scoring.
+Numeric: Gini, gradient-boosting importance, Lasso, redundancy (Viviana, notebooks 03--05).
+Categorical: judge cardinality per building, not per row, and decide on held-out importance; a
+street address is 0.31\% distinct across listings but 99.97\% distinct across buildings, so it is a
+building identifier (Matthew,
+notebook 07; reconcile with Lady's notebook 08). End with the final list and its count.}
+
+\subsection{Models}\label{sec:models}
+\brief{Maria}{~0.5 page}{%
+Target: asking rent when the unit was listed. Inputs: the \nFeatures{} features in \cref{tab:models}'s
+models. Models: linear regression and a decision tree (median imputation), and gradient boosting
+\autocite{friedman2001greedy}, implemented as scikit-learn's histogram gradient boosting
+\autocite{ke2017lightgbm, pedregosa2011scikit}, which handles missing values natively. Why each:
+the linear model as an interpretable reference, the tree for its readable splits, boosting for
+nonlinearity. Hyperparameters in the appendix.}
+
+\subsection{Concession extraction}\label{sec:concession-methods}
+\brief{Matthew}{~0.35 page}{%
+Phase 2's first component. Rule-based extraction of amount, basis (months free or dollars) and
+lease term from \nConcessionEvents{} specials, scored against the truth layer. Concession type is
+already given by the market data, so only the value is predicted.}

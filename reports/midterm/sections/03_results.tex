@@ -1,0 +1,79 @@
+% Section 3. Budget: ~3 pages.  Evaluation + market rent drafted by Matthew for Maria to own.
+\section{Preliminary results}\label{sec:results}
+
+\subsection{Evaluation}\label{sec:evaluation}
+
+We judge a model on buildings it has never seen. Listings are split by building,
+\nTrainBuildings{} for training and \nTestBuildings{} for testing, so no building contributes to
+both. With about \listingsPerBuilding{} listings per building, a split by listing would let a model
+memorize buildings and overstate its accuracy. Our primary metric is the median absolute
+percentage error,
+\[
+  \mathrm{MdAPE} \;=\; \operatorname*{median}_{i}\, \frac{\lvert \hat{y}_i - y_i \rvert}{y_i},
+\]
+which reads directly as a typical miss, compares fairly across markets with different rent levels,
+and is not dominated by the few luxury units with the largest dollar errors. We report mean absolute
+error in dollars and \(R^2\) beside it. Each model is scored twice: against the asking rent it was
+trained to predict, and against the generator's true market rent for the same floor plan and month,
+a comparison only synthetic data allows.
+
+\subsection{Market rent}\label{sec:market-rent}
+\brief{Maria (drafted by Matthew)}{~1 page with the error analysis}{%
+The two paragraphs and the table below are generated from \texttt{scripts/results.py}, which
+reproduces notebook 06 exactly (same features, split and seed). Edit the prose freely; the numbers
+update themselves.}
+
+\Cref{tab:models} compares the three models trained so far with a naive baseline that predicts the
+median rent for the listing's market and bedroom count. Gradient boosting cuts the baseline's
+median error by \errorReduction{}, from \baseMdape{} to \gbmMdape{}, with a mean absolute error of \gbmMae{} and \(R^2 = \gbmRsq\) across the \nTestListings{} listings of the held-out
+buildings.
+
+The last row of \cref{tab:models} is the most informative. A listing's own asking rent sits within
+\noiseFloor{} of the true market rent, so asking rent is a faithful training target, and each
+model's error against the truth (\gbmMdapeTrue{} for gradient boosting) matches its error against
+asking rent. The remaining error is therefore not noise in the listings. It is information about
+each building that our \nFeatures{} features do not carry, and comparable buildings nearby carry
+exactly that information, which is why comp selection comes next (\cref{sec:discussion}).
+
+\begin{table}[tbp]
+  \caption{Performance on \nTestBuildings{} held-out buildings (\nTestListings{} listings). MdAPE
+  is measured against each listing's asking rent and against the generator's true market rent for
+  its floor plan and month. The last row is how far the listing itself sits from the truth.}
+  \label{tab:models}
+  \centering\small
+  \input{generated/tables/model_comparison}
+\end{table}
+
+\subsection{Where the model errs}\label{sec:errors}
+\brief{Maria}{~0.6 page}{%
+The boosted model shrinks toward the middle: it overpredicts cheap units and underpredicts
+expensive ones, with mean actual-minus-predicted rising from \textminus\$184 below \$1,000 to
++\$816 above \$4,000 (checked on the held-out set; notebook 06 shows the same pattern). Show that, then error by market, bedrooms and property
+class, and on the generator's edge cases: lease-up buildings, buildings with masked attributes, DC
+rent control. Matthew will add the breakdown to \texttt{results.py}.}
+
+\figslot{errors}{prediction error by rent level and by segment}{2.0in}{Error analysis, Maria.}
+
+\subsection{What drives the predictions}\label{sec:drivers}
+\brief{Viviana, Lady, Matthew}{~0.5 page}{%
+Which inputs carry the model, by held-out permutation importance. Include the identifier trap:
+in-sample fit ranks building identifiers first while held-out importance ranks them at zero, so
+selecting on in-sample fit would discard property class and ZIP code. Adding the categorical
+features to the model is the planned next run.}
+
+\figslot{drivers}{feature importance on held-out buildings beside in-sample fit}{1.9in}{Importance
+figure, Matthew.}
+
+\subsection{Concession extraction}\label{sec:concessions}
+\brief{Matthew}{~0.5 page}{%
+Rules recover the concession amount in 93\% of non-generic specials and its dollar value within 5\%
+in 92\%. Accuracy is 97\% on LLM-written text and 62\% on the grammar fallback, where specials quote
+dollars or a net effective rent while the truth records months free. Concession type needs no
+model: the market data already agrees with the truth on every one of the \nConcessionEvents{}
+events. Table plus the by-source figure.}
+
+\subsection{Pipeline and reproducibility}\label{sec:pipeline}
+\brief{Matthew}{~0.25 page}{%
+The rubric's ``app or tool'' item. Three commands rebuild the master table from the public
+download (the build itself takes about 15 seconds), 59 join checks verify it, and this report regenerates its
+numbers, tables and figures from the data with one \texttt{make}.}

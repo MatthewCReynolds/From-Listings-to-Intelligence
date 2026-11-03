@@ -1,0 +1,41 @@
+% From Listings to Intelligence: midterm report.
+% Build: `make` (draft, with writing briefs) or `make final` (clean copy).
+\documentclass[11pt, letterpaper]{article}
+\input{preamble}
+\input{generated/numbers}
+\ifdefined\finalbuild \draftfalse \fi
+
+\begin{document}
+
+\titleblock
+  {Columbia University\enspace·\enspace Data Science Capstone\enspace·\enspace Midterm report}
+  {From Listings to Intelligence}
+  {Estimating apartment market rent from listings, and checking it against the truth}
+  {Matthew Reynolds\enspace·\enspace Viviana \todo{surname}\enspace·\enspace Shikha Mehta\enspace·\enspace
+   Maria G.\ Gonzalez Llama\enspace·\enspace Lady Infate\enspace\todo{add UNIs}}
+  {Sponsored by Accolade\enspace·\enspace Faculty advisor \todo{name}\enspace·\enspace November 2026}
+
+\begin{abstract}
+Accolade is building a pricing product that turns apartment listings into an estimate of what a
+unit should rent for. We report progress on its first phase using a synthetic dataset of
+\nSourceRowsM{} million rows that, unlike real data, records the true market rent behind every
+listing. We built a listing-level master table of \nMasterRows{} listings, separated what is known
+when a unit is listed from columns that leak its price, and trained models on buildings held out
+from training. Gradient boosting predicts asking rent on unseen buildings with a median absolute
+error of \gbmMdape{}, against \baseMdape{} for a market-and-bedrooms baseline. Because asking rent
+sits within \noiseFloor{} of the true market rent, nearly all of that error is information our
+features do not yet carry, which comparable-property selection, our next step, is designed to supply.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_methods}
+\input{sections/03_results}
+\input{sections/04_discussion}
+\input{sections/05_contributions}
+
+\printbibliography[heading=bibintoc, title={References}]
+
+\appendix
+\input{sections/appendix}
+
+\end{document}

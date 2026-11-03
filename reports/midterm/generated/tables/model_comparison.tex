@@ -1,0 +1,14 @@
+\begin{tabular}{@{}l S[table-format=3.0] S[table-format=1.2] S[table-format=2.1] S[table-format=2.1]@{}}
+\toprule
+ & {MAE} & {\(R^2\)} & \multicolumn{2}{c}{MdAPE (\%)} \\
+\cmidrule(l){4-5}
+Model & {(\$)} & & {vs.\ asking} & {vs.\ true} \\
+\midrule
+Naive baseline (market \(\times\) bedrooms median) & 443 & 0.30 & 21.0 & 21.0 \\
+Linear regression & 285 & 0.70 & 13.0 & 13.1 \\
+Decision tree & 302 & 0.65 & 13.3 & 13.2 \\
+\textbf{Gradient boosting} & 235 & 0.79 & 10.6 & 10.6 \\
+\midrule
+\textit{The listing's own asking rent} & {---} & {---} & {---} & 2.8 \\
+\bottomrule
+\end{tabular}

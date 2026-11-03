@@ -1,0 +1,31 @@
+% Section 1. Suggested owner: Viviana.  Budget: ~2 pages.
+\section{Introduction}\label{sec:intro}
+
+\subsection{Motivation and business problem}
+\brief{Viviana}{~0.75 page}{%
+Why market rent matters to an apartment operator: price too high and units sit vacant, too low and
+revenue is left on the table. Separate three rents the reader must keep apart: \emph{asking} (what a
+listing says), \emph{effective} (asking minus amortized concessions), and \emph{market} (what a unit
+is worth). Accolade's product turns the first into the third. Name the two phases: market-rent
+estimate from listings (Phase 1), then a daily price recommendation from a property's own leasing
+data (Phase 2).}
+
+\subsection{Existing work}
+\brief{Viviana}{~0.5 page}{%
+Hedonic pricing, rent as a sum of attribute values \autocite{rosen1974hedonic}; comparable-property
+(comp) methods used by appraisers and automated valuation models; revenue-management systems that
+reprice daily. Keep to what bears on our design. The sponsor's Draft Project Plan is the main
+internal reference. Every source in \texttt{refs.bib}; add only ones you have read.}
+
+\subsection{Problem statement}
+\brief{Viviana}{~0.4 page}{%
+Technical goal for Phase 1: for each unit type (bedrooms, bathrooms, square-footage band) and month,
+an asking-rent estimate with a range and its reasons. Say plainly that this midterm covers Phase 1
+modeling and the first Phase 2 component, concession extraction.}
+
+\subsection{Overview}
+\brief{Viviana}{~0.35 page}{%
+One paragraph walking the pipeline in \cref{fig:pipeline}, then a sentence per section of this report.}
+
+\figslot{pipeline}{the pipeline from source tables through the master table, feature selection
+and models to evaluation against the answer key}{1.55in}{Pipeline diagram, drawn in TikZ by Matthew.}
