@@ -16,7 +16,9 @@ from pandas.api.types import (
 REPO = Path(__file__).resolve().parent.parent
 MASTER_PARQUET = REPO / "data" / "master_listing.parquet"
 MASTER_COLUMNS = REPO / "data" / "master_columns.csv"
-DATE_PATTERN = re.compile(r"\d{4}-\d{2}-\d{2}")
+DATE_PATTERN = re.compile(
+    r"\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?"
+)
 
 
 def standardize_types(df: pd.DataFrame) -> pd.DataFrame:
@@ -54,7 +56,7 @@ def standardize_types(df: pd.DataFrame) -> pd.DataFrame:
         if strings.str.fullmatch(DATE_PATTERN).all():
             parsed = pd.to_datetime(
                 series,
-                format="%Y-%m-%d",
+                format="mixed",
                 errors="coerce",
             )
 
