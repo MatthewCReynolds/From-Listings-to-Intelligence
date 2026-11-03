@@ -48,6 +48,10 @@ FEATURES = [
 ]
 
 numbers: dict[str, str] = {}
+cache: dict = {}
+POST_TABLES = {"market.price_observation", "market.concession_event"}
+POST_COLS = {"market_unit__days_on_market", "market_unit__status", "market_unit__exit_market"}
+MARKETS = {"chicago": "Chicago", "dfw": "Dallas\u2013Fort Worth", "dc": "Washington, DC"}
 
 
 def count(n):
@@ -160,7 +164,8 @@ def leakage_correlations():
 
 
 def models():
-    df = pd.read_parquet(MASTER, columns=FEATURES + [TARGET, TRUTH, "property_id", "market"])
+    df = pd.read_parquet(MASTER, columns=FEATURES + [TARGET, TRUTH, "property_id", "market",
+                                                     "market_building__property_class"])
     df = df[df[TARGET].notna()].reset_index(drop=True)
     X, y = df[FEATURES].astype(float), df[TARGET].astype(float)
     tr, te = next(GroupShuffleSplit(n_splits=1, test_size=0.20, random_state=SEED)
@@ -201,6 +206,8 @@ def models():
                   "bed": df.market_unit__bed.iloc[te].to_numpy()}
                  ).to_parquet(GEN / "data" / "test_predictions.parquet", index=False)
 
+    cache.update(test=df.iloc[te].assign(pred=preds["Gradient boosting"]).reset_index(drop=True),
+                 model=specs["Gradient boosting"], X_test=X.iloc[te], y_test=y.iloc[te])
     gbm, base = m.iloc[3], m.iloc[0]
     numbers.update({
         "nListings": count(len(df)),
@@ -243,6 +250,146 @@ def write_model_table(m, floor):
     print("  table   generated/tables/model_comparison.tex")
 
 
+def eda():
+    """Rent by market and bedrooms, and one point per building for the map."""
+    df = pd.read_parquet(MASTER, columns=[TARGET, "market", "market_unit__bed", "property_id",
+                                          "market_building__lat", "market_building__lon",
+                                          "market_building__submarket"])
+    df = df[df[TARGET].notna()].assign(beds=lambda d: d.market_unit__bed.clip(upper=4))
+    g = df.groupby(["market", "beds"])[TARGET]
+    q = g.quantile([0.1, 0.25, 0.5, 0.75, 0.9]).unstack()
+    q.columns = ["p10", "p25", "p50", "p75", "p90"]
+    q.assign(n=g.size()).reset_index().to_csv(GEN / "data" / "rent_by_market_beds.csv", index=False)
+
+    b = (df.groupby("property_id")
+           .agg(market=("market", "first"), lat=("market_building__lat", "first"),
+                lon=("market_building__lon", "first"), rent=(TARGET, "median"), n=(TARGET, "size"))
+           .reset_index(drop=True).round(5))
+    b.to_csv(GEN / "data" / "building_map.csv", index=False)
+    (df.groupby(["market", "market_building__submarket"])
+       .agg(lat=("market_building__lat", "mean"), lon=("market_building__lon", "mean"),
+            rent=(TARGET, "median"), listings=(TARGET, "size"), buildings=("property_id", "nunique"))
+       .reset_index().rename(columns={"market_building__submarket": "submarket"}).round(5)
+       .to_csv(GEN / "data" / "submarket_map.csv", index=False))
+    for k, med in df.groupby("market")[TARGET].median().items():
+        numbers[f"medRent{k.capitalize()}"] = f"\\${med:,.0f}"
+    print(f"  eda: {len(q)} market x bedroom cells, {len(b):,} buildings mapped")
+
+
+def funnel():
+    """Column counts from the master table to the model's inputs."""
+    cat = pd.read_csv(CATALOG)
+    feat = cat[cat.role == "feature"]
+    known = feat[~(feat.source_table.isin(POST_TABLES) | feat.column.isin(POST_COLS))]
+    num = pd.read_csv(REPO / "outputs" / "05_phase_01_numerical_final_features.csv")
+    cg = pd.read_csv(REPO / "outputs" / "07_phase_01_categorical_final_features.csv", index_col=0)
+    kept = int((num.decision == "keep").sum() + (cg.decision == "keep").sum())
+    stages = pd.DataFrame([
+        ("Columns in the master table", len(cat)),
+        ("Tagged as features", len(feat)),
+        ("Known when the unit is listed", len(known)),
+        ("Scored so far", len(num) + len(cg)),
+        ("Kept after scoring", kept),
+        ("In the current model", len(FEATURES)),
+    ], columns=["stage", "n"])
+    stages.to_csv(GEN / "data" / "funnel.csv", index=False)
+    numbers.update({"nFeatureCols": count(len(feat)), "nKnownCols": count(len(known)),
+                    "nKnownBoolean": count((known.type_group == "boolean").sum()),
+                    "nScored": count(len(num) + len(cg)), "nKept": count(kept),
+                    "nKeptNumeric": count((num.decision == "keep").sum()),
+                    "nKeptCategorical": count((cg.decision == "keep").sum())})
+    print("  funnel: " + " -> ".join(str(n) for n in stages.n))
+
+
+def errors():
+    """Where the boosted model misses: by rent band, by segment, and the fit itself."""
+    t = cache["test"].copy()
+    t["ape"] = (t.pred - t[TARGET]).abs() / t[TARGET]
+    t["resid"] = t[TARGET] - t.pred
+
+    edges = [0, 1000, 1500, 2000, 2500, 3000, 4000, np.inf]
+    labels = ["<1k", "1–1.5k", "1.5–2k", "2–2.5k", "2.5–3k", "3–4k", ">4k"]
+    t["band"] = pd.cut(t[TARGET], edges, labels=labels)
+    (t.groupby("band", observed=True)
+      .agg(n=("resid", "size"), bias=("resid", "mean"), mdape=("ape", "median"))
+      .reset_index().assign(mdape=lambda d: 100 * d.mdape)
+      .to_csv(GEN / "data" / "bias_by_band.csv", index=False))
+
+    con = duckdb.connect()
+    con.execute(f"ATTACH '{SYNTH_DB.as_posix()}' AS s (READ_ONLY)")
+    flags = con.execute("SELECT property_id, is_lease_up_building, rent_controlled "
+                        "FROM s.truth.building_params").df()
+    t = t.merge(flags, on="property_id", how="left")
+    masked = t.market_building__year_built.isna() | t.market_building__number_units.isna()
+
+    seg = []
+    def add(group, label, mask):
+        part = t[mask]
+        if part.property_id.nunique() < 3:
+            return
+        seg.append(dict(group=group, label=label, n=len(part), buildings=part.property_id.nunique(),
+                        mdape=100 * part.ape.median(), bias=part.resid.mean()))
+    add("All", "All held-out listings", t.index == t.index)
+    for k, v in MARKETS.items():
+        add("Market", v, t.market == k)
+    for b, v in [(0, "Studio"), (1, "1 bedroom"), (2, "2 bedrooms"), (3, "3 bedrooms")]:
+        add("Bedrooms", v, t.market_unit__bed == b)
+    add("Bedrooms", "4+ bedrooms", t.market_unit__bed >= 4)
+    for c in ["A", "B", "C"]:
+        add("Class", f"Class {c}", t.market_building__property_class == c)
+    add("Building", "Stabilized", ~t.is_lease_up_building.astype(bool))
+    add("Building", "Lease-up", t.is_lease_up_building.astype(bool))
+    add("Building", "Year built or units masked", masked)
+    add("Building", "Rent-controlled (DC)", t.rent_controlled.astype(bool))
+    pd.DataFrame(seg).to_csv(GEN / "data" / "error_by_segment.csv", index=False)
+
+    h, xe, ye = np.histogram2d(t[TARGET], t.pred, bins=64, range=[[400, 5200], [400, 5200]])
+    xc, yc = (xe[:-1] + xe[1:]) / 2, (ye[:-1] + ye[1:]) / 2
+    ii, jj = np.nonzero(h)
+    pd.DataFrame({"actual": xc[ii], "pred": yc[jj], "count": h[ii, jj].astype(int)}).to_csv(
+        GEN / "data" / "fit_hexgrid.csv", index=False)
+
+    lo, hi = t[t.band == "<1k"].resid.mean(), t[t.band == ">4k"].resid.mean()
+    sg = pd.DataFrame(seg).set_index("label")
+    numbers.update({"biasLow": f"\\${abs(lo):,.0f}", "biasHigh": f"\\${hi:,.0f}",
+                    "mdapeLeaseUp": pct(sg.loc["Lease-up", "mdape"]),
+                    "mdapeStabilized": pct(sg.loc["Stabilized", "mdape"])})
+    print(f"  errors: {len(seg)} segments, bias {lo:+.0f} (<1k) to {hi:+.0f} (>4k)")
+
+
+def importance():
+    """Held-out permutation importance: dollars of MAE lost when a feature is shuffled."""
+    from sklearn.inspection import permutation_importance
+    rng = np.random.default_rng(SEED)
+    idx = rng.choice(len(cache["y_test"]), 20_000, replace=False)
+    r = permutation_importance(cache["model"], cache["X_test"].iloc[idx], cache["y_test"].iloc[idx],
+                               scoring="neg_mean_absolute_error", n_repeats=5, random_state=SEED)
+    out = (pd.DataFrame({"feature": FEATURES, "dmae": r.importances_mean, "sd": r.importances_std})
+             .sort_values("dmae", ascending=False))
+    out.to_csv(GEN / "data" / "gbm_importance.csv", index=False)
+    top = out.iloc[0]
+    numbers.update({"topFeature": top.feature.split("__")[-1].replace("_", r"\_"),
+                    "topFeatureDmae": f"\\${top.dmae:,.0f}"})
+    print(f"  importance: top {top.feature} (+${top.dmae:,.0f} MAE)")
+
+
+def borrowed():
+    """Results from earlier notebooks the report cites, copied so figures stay self-contained."""
+    cg = pd.read_csv(REPO / "outputs" / "07_phase_01_categorical_final_features.csv", index_col=0)
+    cg.rename_axis("feature").reset_index().to_csv(GEN / "data" / "categorical_scores.csv", index=False)
+    cs = pd.read_csv(REPO / "outputs" / "01_phase_02_concession_extraction_summary.csv")
+    cs.to_csv(GEN / "data" / "concession_summary.csv", index=False)
+    o = cs[cs.slice_by == "overall"].iloc[0]
+    src = cs[cs.slice_by == "text_source"].set_index("slice")
+    numbers.update({"concAmountAcc": pct(o.amount_acc, 0), "concWithinFive": pct(o.total_within_5pct, 0),
+                    "concLlm": pct(src.loc["llm", "amount_acc"], 0),
+                    "concGrammar": pct(src.loc["grammar", "amount_acc"], 0),
+                    "concN": count(o.n),
+                    "concMonthsFree": pct(cs[(cs.slice_by == "type") & (cs.slice == "upfront_free_months")]
+                                          .amount_acc.iloc[0], 0)})
+    print("  borrowed: categorical scores, concession summary")
+
+
 def write_numbers():
     body = ["% Generated by scripts/results.py. Do not edit: rerun `make results`.", ""]
     body += [f"\\newcommand{{\\{k}}}{{{v}}}" for k, v in sorted(numbers.items())]
@@ -258,4 +405,9 @@ if __name__ == "__main__":
     dwellsy_facts()
     leakage_correlations()
     models()
+    eda()
+    funnel()
+    errors()
+    importance()
+    borrowed()
     write_numbers()

@@ -27,5 +27,10 @@ modeling and the first Phase 2 component, concession extraction.}
 \brief{Viviana}{~0.35 page}{%
 One paragraph walking the pipeline in \cref{fig:pipeline}, then a sentence per section of this report.}
 
-\figslot{pipeline}{the pipeline from source tables through the master table, feature selection
-and models to evaluation against the answer key}{1.55in}{Pipeline diagram, drawn in TikZ by Matthew.}
+\begin{figure}[tbp]
+  \centering
+  \input{diagrams/pipeline}
+  \caption{From source tables to evaluation. The generator's truth layer feeds only the evaluation:
+  it scores predictions and is never a model input.}
+  \label{fig:pipeline}
+\end{figure}

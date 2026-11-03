@@ -1,0 +1,28 @@
+% Pipeline: source layers to evaluation. Numbers come from generated/numbers.tex.
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize, >={Stealth[length=1.7mm, width=1.4mm]},
+  box/.style={draw=rulecolor, line width=0.6pt, fill=white, align=left, anchor=north west,
+              inner xsep=5pt, inner ysep=4pt},
+  layer/.style={box, fill=wash, text width=2.3cm},
+  stage/.style={box, text width=2.35cm, minimum height=2.05cm},
+  flow/.style={->, draw=ink2, line width=0.7pt},
+  h/.style={font=\sffamily\scriptsize\bfseries\color{ink}},
+]
+\node[layer] (market) at (0, 0) {\textbf{Market}\\\textcolor{ink2}{listings, buildings,\\specials}};
+\node[layer, below=1.8mm of market] (operator) {\textbf{Operator}\\\textcolor{ink2}{leases, leads\\(Phase 2)}};
+\node[layer, below=1.8mm of operator, draw=brick, fill=white] (truth) {\textbf{\textcolor{brick}{Truth}}\\\textcolor{ink2}{true rents,\\answer keys}};
+\node[anchor=south west, inner sep=0, text=ink2] at (0, 0.12) {\nSourceTables{} tables\enspace·\enspace\nSourceRowsM\,M rows};
+
+\node[stage] (master) at (3.55, 0) {\textbf{Master table}\\[2pt]\textcolor{ink2}{one row per listing\\\nMasterRows{} rows\\\nMasterCols{} columns}};
+\node[stage] (select) at (6.7, 0) {\textbf{Feature selection}\\[2pt]\textcolor{ink2}{roles screen leaks,\\then scoring\\\nMasterCols{} \(\to\) \nFeatures{} inputs}};
+\node[stage] (models) at (9.85, 0) {\textbf{Models}\\[2pt]\textcolor{ink2}{baseline, linear,\\decision tree,\\gradient boosting}};
+\node[stage, draw=accent, line width=0.8pt] (eval) at (13.0, 0) {\textbf{\textcolor{accent}{Evaluation}}\\[2pt]\textcolor{ink2}{\nTestBuildings{} unseen\\buildings, scored\\against asking\\and true rent}};
+
+\draw[flow] (market.east) -- (master.west |- market.east);
+\draw[flow] (master.east) -- (select.west);
+\draw[flow] (select.east) -- (models.west);
+\draw[flow] (models.east) -- (eval.west);
+\draw[flow, draw=brick] (truth.east) -- (eval.south |- truth.east) -- (eval.south);
+\node[fill=white, inner xsep=3pt, text=brick] at ($(truth.east)!0.5!(eval.south |- truth.east)$)
+  {scores predictions, never an input};
+\end{tikzpicture}

@@ -43,6 +43,8 @@ plt.rcParams.update({
         r"\setsansfont{Libertinus Sans}",
         r"\usepackage{unicode-math}",
         r"\setmathfont{Libertinus Math}",
+        r"\usepackage{xcolor}",
+        r"\definecolor{ink2}{HTML}{4E6273}",
     ]),
     "font.family": "sans-serif",
     "font.size": 8,

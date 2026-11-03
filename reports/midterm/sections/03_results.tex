@@ -44,6 +44,13 @@ exactly that information, which is why comp selection comes next (\cref{sec:disc
   \input{generated/tables/model_comparison}
 \end{table}
 
+\begin{figure}[tbp]
+  \centering
+  \includegraphics{fit}
+  \caption{Predictions on held-out buildings. (a)~Each square is a bin of listings, darker where more fall; the red line is perfect prediction. (b)~Mean error by actual rent: the model pulls toward the middle, overpredicting the cheapest units by \biasLow{} and underpredicting the most expensive by \biasHigh{}.}
+  \label{fig:fit}
+\end{figure}
+
 \subsection{Where the model errs}\label{sec:errors}
 \brief{Maria}{~0.6 page}{%
 The boosted model shrinks toward the middle: it overpredicts cheap units and underpredicts
@@ -52,7 +59,12 @@ expensive ones, with mean actual-minus-predicted rising from \textminus\$184 bel
 class, and on the generator's edge cases: lease-up buildings, buildings with masked attributes, DC
 rent control. Matthew will add the breakdown to \texttt{results.py}.}
 
-\figslot{errors}{prediction error by rent level and by segment}{2.0in}{Error analysis, Maria.}
+\begin{figure}[tbp]
+  \centering
+  \includegraphics{segments}
+  \caption{Error by segment on held-out buildings. (a)~MdAPE; the vertical line is the overall \gbmMdape{}. (b)~Mean actual minus predicted. Class A is underpredicted and class C overpredicted, consistent with the model lacking property class, the strongest categorical candidate in \cref{fig:drivers}.}
+  \label{fig:segments}
+\end{figure}
 
 \subsection{What drives the predictions}\label{sec:drivers}
 \brief{Viviana, Lady, Matthew}{~0.5 page}{%
@@ -61,8 +73,12 @@ in-sample fit ranks building identifiers first while held-out importance ranks t
 selecting on in-sample fit would discard property class and ZIP code. Adding the categorical
 features to the model is the planned next run.}
 
-\figslot{drivers}{feature importance on held-out buildings beside in-sample fit}{1.9in}{Importance
-figure, Matthew.}
+\begin{figure}[tbp]
+  \centering
+  \includegraphics{drivers}
+  \caption{Which inputs matter on unseen buildings. (a)~Dollars of mean absolute error added when each of the model's \nFeatures{} inputs is shuffled. (b)~The same measure for the categorical candidates, blue where kept. (c)~Their in-sample fit: state and metro area fit the training buildings but add nothing on unseen ones.}
+  \label{fig:drivers}
+\end{figure}
 
 \subsection{Concession extraction}\label{sec:concessions}
 \brief{Matthew}{~0.5 page}{%
@@ -71,6 +87,14 @@ in 92\%. Accuracy is 97\% on LLM-written text and 62\% on the grammar fallback, 
 dollars or a net effective rent while the truth records months free. Concession type needs no
 model: the market data already agrees with the truth on every one of the \nConcessionEvents{}
 events. Table plus the by-source figure.}
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics{concessions}
+  \caption{Rule-based concession extraction on \concN{} specials that state terms. (a)~Strong on LLM-written text, weaker on the generator's template text, which quotes dollars where the truth records months free. (b)~Every dollar-denominated special is read correctly; months free reach \concMonthsFree{}.}
+  \label{fig:concessions}
+\end{figure}
+
 
 \subsection{Pipeline and reproducibility}\label{sec:pipeline}
 \brief{Matthew}{~0.25 page}{%
