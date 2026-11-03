@@ -103,26 +103,17 @@
   pdfauthor={Columbia Data Science Capstone}]{hyperref}
 \usepackage[capitalise, noabbrev]{cleveref}
 
-% Title block: on page 1, no separate title page (it would cost one of ten) --
-\newcommand{\titleblock}[5]{%
+% Title block: centred title, team, date, as in the sample report.
+\newcommand{\titleblock}[3]{%
   \thispagestyle{plain}%
-  \begingroup\raggedright
-  {\sffamily\footnotesize\bfseries\color{accent}\addfontfeature{LetterSpace=8}%
-    \MakeUppercase{#1}\par}
-  \vspace{0.7em}
-  {\displayfont\fontsize{26}{30}\selectfont #2\par}
-  \vspace{0.35em}
-  {\fontsize{13.5}{17}\selectfont\itshape\color{ink2} #3\par}
-  \vspace{1.0em}
-  {\sffamily\small #4\par}
-  \vspace{0.25em}
-  {\sffamily\footnotesize\color{ink2} #5\par}
-  \vspace{0.9em}
-  {\color{rulecolor}\rule{\linewidth}{0.5pt}\par}
-  \endgroup
-  \vspace{0.6em}}
-
-\newcommand{\member}[2]{\mbox{#1\,{\color{ink2}\scriptsize #2}}}
+  \begin{center}
+    {\LARGE #1\par}
+    \vspace{0.9em}
+    {\normalsize #2\par}
+    \vspace{0.6em}
+    {\normalsize #3\par}
+  \end{center}
+  \vspace{0.8em}}
 
 \renewenvironment{abstract}
   {\par\noindent\small\textsf{\textbf{\color{accent}Abstract.}}\enspace\ignorespaces}
