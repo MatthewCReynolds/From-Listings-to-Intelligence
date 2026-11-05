@@ -1,36 +1,87 @@
-% Section 1. Suggested owner: Viviana.  Budget: ~2 pages.
 \section{Introduction}\label{sec:intro}
 
 \subsection{Motivation and business problem}
-\brief{Viviana}{~0.75 page}{%
-Why market rent matters to an apartment operator: price too high and units sit vacant, too low and
-revenue is left on the table. Separate three rents the reader must keep apart: \emph{asking} (what a
-listing says), \emph{effective} (asking minus amortized concessions), and \emph{market} (what a unit
-is worth). Accolade's product turns the first into the third. Name the two phases: market-rent
-estimate from listings (Phase 1), then a daily price recommendation from a property's own leasing
-data (Phase 2).}
+
+Accolade is a property management platform that is seeking to expand its product offerings by
+adding a revenue management product. The goal is to help property owners price their units
+correctly: an apartment priced too low leaves revenue on the table, while one priced too high sits
+vacant, and every vacant day is rent the owner does not recover.
+
+Setting the right price depends on what comparable units are asking right now, and identifying that
+competitive set is an important challenge in itself. Geographic proximity alone may not be
+sufficient, since unit characteristics, amenities, building quality, concessions, fees, and other
+factors also affect how a unit is priced.
+
+Throughout this report it is also important to distinguish three rents. The \emph{asking rent} is
+the price posted on a listing. The \emph{effective rent} is the asking rent less any concessions,
+such as a free month, spread over the lease:
+\[
+  \text{effective rent} \;=\; \text{asking rent} \;-\; \text{amortized monthly concession}.
+\]
+The \emph{market rent} is what a unit is actually worth given the market around it. Accolade's
+product aims to estimate the third from listings that only show the first.
+
+Following Accolade's Draft Project Plan, the product is being built in two phases. The first, a
+\emph{market rent estimate}, determines what comparable properties are currently asking for a given
+unit type. The second, a \emph{dynamic price recommendation}, determines the asking price a property
+should post today based on its current price, demand relative to its occupancy target, comparable
+prices, price sensitivity, and recent leases. Phase~2 builds on Phase~1, since the recommendation
+uses the comparable set and the market rent estimate as its anchors.
 
 \subsection{Existing work}
-\brief{Viviana}{~0.5 page}{%
-Hedonic pricing, rent as a sum of attribute values \autocite{rosen1974hedonic}; comparable-property
-(comp) methods used by appraisers and automated valuation models; revenue-management systems that
-reprice daily. Keep to what bears on our design. The sponsor's Draft Project Plan is the main
-internal reference. Every source in \texttt{refs.bib}; add only ones you have read.}
+
+Rent estimation has long been approached through hedonic pricing, which treats the price of a
+property as the sum of the values of its characteristics~\autocite{rosen1974hedonic}. To ground our
+approach in more recent work, each member of the team reviewed a paper covering a modeling
+technique, the effects of algorithm-based pricing, or the measurement of rental markets from
+listing data.
+
+A study of residential property valuation in Germany compared an expert function for selecting
+comparable properties with hedonic models (OLS and GAM) and XGBoost, and found that XGBoost achieved
+the best predictive performance~\needcite{German valuation study}. Work on automating real estate
+appraisals similarly treats comparable-property selection as the baseline that learned models must
+beat~\needcite{automated appraisal study}. Other studies show the value of richer inputs: a
+Melbourne study combined text, image, and geospatial embeddings~\needcite{Melbourne study}, a São
+Paulo study paired location-based features with natural language processing of listing
+descriptions~\needcite{São Paulo study}, and a reproducible study of the major Spanish markets used
+machine learning to identify spatial market segments~\needcite{Spanish markets study}. Finally,
+Zillow's home value index methodology shows how values can be measured consistently from listings
+over time~\needcite{Zillow ZHVI methodology}, while a review of algorithmic pricing in the American
+rental market examined its effects with two-way fixed effects (TWFE) models~\needcite{algorithmic
+pricing review}.
+
+These ideas map directly onto Accolade's data: automated comparable selection onto the platform's
+suggested comparables, image embeddings onto its listing photos and quality scores, and time-based
+validation onto its daily price series. They also shaped the models we consider, from hedonic
+regression to Random Forest, XGBoost, and stacked ensembles.
 
 \subsection{Problem statement}
-\brief{Viviana}{~0.4 page}{%
-Technical goal for Phase 1: for each unit type (bedrooms, bathrooms, square-footage band) and month,
-an asking-rent estimate with a range and its reasons. Say plainly that this midterm covers Phase 1
-modeling and the first Phase 2 component, concession extraction.}
+
+The technical goal of Phase~1 is to estimate the asking rent of a unit type, defined by its
+bedrooms, bathrooms, and a square-footage band, as a point estimate together with a range. Two
+requirements attach to every estimate. First, the range is required rather than optional, and it
+must be reported with the number of comparables or observations behind it. Second, every price must
+be explainable in terms of which comparables were used, which adjustments were applied, and which
+limits bound the result. Net effective rent is a derived second output rather than the first target,
+and it will be produced once concessions can be reliably extracted from listing text.
+
+This report covers the Phase~1 modeling completed so far and the first component of Phase~2, the
+extraction of concession terms from advertised specials.
 
 \subsection{Overview}
-\brief{Viviana}{~0.35 page}{%
-One paragraph walking the pipeline in \cref{fig:pipeline}, then a sentence per section of this report.}
 
-\begin{figure}[tbp]
+\Cref{fig:pipeline} summarizes our pipeline. We merged the source tables of the synthetic dataset
+into a single master table with one row per listing, screened its variables for information that is
+not available when a unit is listed, scored the remaining variables, and trained and compared models
+on buildings held out from training. The generator's truth layer is used only to evaluate the
+predictions, never as an input. \Cref{sec:methods} describes the data, preprocessing, exploratory
+analysis, and methods; \cref{sec:results} presents our preliminary results; and
+\cref{sec:discussion} discusses our conclusions and next steps.
+
+\begin{figure}[htbp]
   \centering
   \input{diagrams/pipeline}
   \caption{From source tables to evaluation. The generator's truth layer feeds only the evaluation:
-  it scores predictions and is never a model input.}
+  it scores the predictions and is never a model input.}
   \label{fig:pipeline}
 \end{figure}

@@ -14,15 +14,19 @@
   {\today}
 
 \begin{abstract}
-Accolade is building a pricing product that turns apartment listings into an estimate of what a
-unit should rent for. We report progress on its first phase using a synthetic dataset of
-\nSourceRowsM{} million rows that, unlike real data, records the true market rent behind every
-listing. We built a listing-level master table of \nMasterRows{} listings, separated what is known
-when a unit is listed from columns that leak its price, and trained models on buildings held out
-from training. Gradient boosting predicts asking rent on unseen buildings with a median absolute
-error of \gbmMdape{}, against \baseMdape{} for a market-and-bedrooms baseline. Because asking rent
-sits within \noiseFloor{} of the true market rent, nearly all of that error is information our
-features do not yet carry, which comparable-property selection, our next step, is designed to supply.
+Accolade, a property management platform, is developing a revenue management product to help
+property owners price their units correctly, so that they neither underprice their apartments nor
+overprice them and leave them sitting vacant. This report describes our progress on the first phase
+of that product, a market rent estimate. Because the real listing data was not yet available, we
+worked with a synthetic dataset provided by Accolade, which mirrors the structure of the expected
+data and, unlike real data, also records the true market rent behind every listing. We merged
+\nMasterTables{} of its \nSourceTables{} tables into a master table of \nMasterRows{} listings,
+separated the variables known when a unit is listed from those that reveal its price, and trained
+models on \nTrainBuildings{} buildings before testing them on \nTestBuildings{} others. Gradient
+boosting predicts the asking rent with a median absolute percentage error of \gbmMdape{}, compared
+with \baseMdape{} for a simple baseline. Since asking rent sits within \noiseFloor{} of the true
+market rent, most of the remaining error comes from information our variables do not yet capture,
+which motivates the comparable-property selection we plan next.
 \end{abstract}
 
 \input{sections/01_introduction}

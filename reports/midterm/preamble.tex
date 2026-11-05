@@ -1,27 +1,25 @@
 % ---------------------------------------------------------------------------
-%  Visual identity for the report. Compile with LuaLaTeX (make, or latexmk).
-%  Writers should not need to touch this file.
+%  Preamble. Compile with LuaLaTeX (make, or latexmk). Writers need not touch it.
 % ---------------------------------------------------------------------------
 
-% Page ---------------------------------------------------------------------
-\usepackage[letterpaper, margin=1in, headheight=14pt, headsep=18pt]{geometry}
-\linespread{1.06}
-\setlength{\parindent}{1.2em}
+% Page -----------------------------------------------------------------------
+\usepackage[letterpaper, margin=1in]{geometry}
+\linespread{1.04}
+\setlength{\parindent}{1.5em}
 \setlength{\parskip}{0pt}
 \raggedbottom
 
-% Type: one family across text, headings, figures and math -------------------
+% Type: Libertinus, the successor of the Libertine face ACM uses -------------
 \usepackage{fontspec}
 \usepackage{unicode-math}
 \setmainfont{Libertinus Serif}[Numbers={Proportional,Lining}]
 \setsansfont{Libertinus Sans}
 \setmonofont{Libertinus Mono}[Scale=MatchLowercase]
 \setmathfont{Libertinus Math}
-\newfontfamily\displayfont{Libertinus Serif Display}
-\usepackage[final, protrusion=true, expansion=true, tracking=true]{microtype}
+\usepackage[final, protrusion=true, expansion=true]{microtype}
 \usepackage[english]{babel}
 
-% Colour: an accent and its counterpart, as in the figures ------------------
+% Colour, for figures and drafting aids only --------------------------------
 \usepackage{xcolor}
 \definecolor{accent}{HTML}{1F6FA8}
 \definecolor{brick}{HTML}{B03E26}
@@ -29,55 +27,39 @@
 \definecolor{ink2}{HTML}{4E6273}
 \definecolor{rulecolor}{HTML}{C9D4DC}
 \definecolor{wash}{HTML}{F3F6F8}
-\color{ink}
 
-% Headings -------------------------------------------------------------------
-\usepackage[explicit]{titlesec}
-\titleformat{\section}
-  {\sffamily\fontsize{14}{17}\selectfont\bfseries}
-  {\textcolor{accent}{\thesection}}{0.7em}{#1}
-\titleformat{\subsection}
-  {\sffamily\fontsize{11.5}{14}\selectfont\bfseries}
-  {\textcolor{accent}{\thesubsection}}{0.7em}{#1}
-\titleformat{\subsubsection}[runin]
-  {\sffamily\normalsize\bfseries}{}{0pt}{#1.}
-\titlespacing*{\section}{0pt}{1.7em plus 0.4em minus 0.2em}{0.55em}
-\titlespacing*{\subsection}{0pt}{1.2em plus 0.3em minus 0.2em}{0.4em}
-\titlespacing*{\subsubsection}{0pt}{0.7em plus 0.2em}{0.6em}
+% Headings: serif, black, numbered in the usual way -------------------------
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}[runin]{\normalfont\normalsize\itshape}{}{0pt}{}[.]
+\titlespacing*{\section}{0pt}{1.5em plus 0.4em minus 0.2em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.1em plus 0.3em minus 0.2em}{0.45em}
+\titlespacing*{\subsubsection}{0pt}{0.6em plus 0.2em}{0.5em}
 
-% Running header and footer --------------------------------------------------
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\headrule}{\color{rulecolor}\hrule height\headrulewidth}
-\fancyhead[L]{\sffamily\footnotesize\color{ink2}From Listings to Intelligence\enspace·\enspace Midterm report}
-\fancyhead[R]{\sffamily\footnotesize\color{ink2}\thepage}
-\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
-  \fancyfoot[C]{\sffamily\footnotesize\color{ink2}\thepage}}
+% Page numbers centred at the foot, no running head -------------------------
+\pagestyle{plain}
 
 % Figures, tables, captions -------------------------------------------------
 \usepackage{graphicx}
+\graphicspath{{generated/figures/}}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, calc, positioning}
-\graphicspath{{generated/figures/}}
 \usepackage{booktabs}
 \setlength{\aboverulesep}{0.4ex}
 \setlength{\belowrulesep}{0.65ex}
 \usepackage{siunitx}
 \sisetup{group-separator={,}, group-minimum-digits=4, detect-all}
 \usepackage{caption}
-\DeclareCaptionLabelFormat{accent}{\textcolor{accent}{#1~#2}}
-\captionsetup{font={small,sf}, labelfont=bf, labelformat=accent, labelsep=period,
-  justification=justified, singlelinecheck=false, skip=7pt}
-\captionsetup[table]{position=top, skip=5pt}
+\captionsetup{font=small, labelfont=bf, labelsep=period, justification=justified,
+  singlelinecheck=true, skip=6pt}
+\captionsetup[table]{position=top, skip=4pt}
 \usepackage{subcaption}
 \usepackage{float}
-% Floats never appear before the text that introduces them (flafter), and never
-% drift past the next section heading (placeins).
+% Floats never appear before the text that introduces them (flafter), never
+% drift past the next section heading (placeins), and float pages start at the top.
 \usepackage{flafter}
 \usepackage[section]{placeins}
-% Pages holding only floats start at the top rather than centring them.
 \makeatletter
 \setlength{\@fptop}{0pt}
 \setlength{\@fpsep}{14pt plus 1fil}
@@ -89,21 +71,19 @@
 
 % Lists, notes ---------------------------------------------------------------
 \usepackage{enumitem}
-\setlist{itemsep=0.15em, topsep=0.35em, leftmargin=1.3em}
-\usepackage[bottom, hang]{footmisc}
-\setlength{\footnotemargin}{0.9em}
+\setlist{itemsep=0.1em, topsep=0.3em, leftmargin=1.5em}
+\usepackage[bottom]{footmisc}
 
 % Citations and cross-references --------------------------------------------
 \usepackage[style=numeric-comp, sorting=none, maxbibnames=4, giveninits=true,
   url=false, doi=true, backend=biber]{biblatex}
 \addbibresource{refs.bib}
 \renewcommand*{\bibfont}{\small}
-\usepackage[colorlinks, linkcolor=accent, citecolor=accent, urlcolor=accent,
-  pdftitle={From Listings to Intelligence: Midterm Report},
-  pdfauthor={Columbia Data Science Capstone}]{hyperref}
+\usepackage[hidelinks, pdftitle={Midterm Report: From Listings to Intelligence},
+  pdfauthor={Team 24, Columbia University}]{hyperref}
 \usepackage[capitalise, noabbrev]{cleveref}
 
-% Title block: centred title, team, date, as in the sample report.
+% Title block: centred title, team, date, as in the sample report -----------
 \newcommand{\titleblock}[3]{%
   \thispagestyle{plain}%
   \begin{center}
@@ -113,11 +93,13 @@
     \vspace{0.6em}
     {\normalsize #3\par}
   \end{center}
-  \vspace{0.8em}}
+  \vspace{0.4em}}
 
+% Abstract: the standard article form, centred heading and a narrower measure
 \renewenvironment{abstract}
-  {\par\noindent\small\textsf{\textbf{\color{accent}Abstract.}}\enspace\ignorespaces}
-  {\par\vspace{0.4em}{\color{rulecolor}\noindent\rule{\linewidth}{0.5pt}}\par\vspace{0.2em}}
+  {\begin{center}\small\bfseries Abstract\end{center}\vspace{-0.5em}%
+   \begin{list}{}{\setlength{\leftmargin}{3em}\setlength{\rightmargin}{3em}}\item\relax\small}
+  {\end{list}\vspace{0.6em}}
 
 % Drafting aids. \draftfalse (or `make final`) removes every brief and marker.
 \newif\ifdraft \drafttrue
@@ -125,7 +107,7 @@
 \newtcolorbox{briefbox}[1]{enhanced, breakable, sharp corners, boxrule=0pt,
   colback=wash, left=7pt, right=7pt, top=5pt, bottom=5pt, before skip=6pt, after skip=8pt,
   fontupper=\sffamily\footnotesize\color{ink2}, title={#1}, coltitle=ink2,
-  fonttitle=\sffamily\scriptsize\bfseries\addfontfeature{LetterSpace=6}, colbacktitle=wash,
+  fonttitle=\sffamily\scriptsize\bfseries, colbacktitle=wash,
   attach title to upper, after title={\par\smallskip}}
 % \brief{owner}{pages}{what to cover}
 \newcommand{\brief}[3]{\ifdraft\begin{briefbox}{\MakeUppercase{Writing brief · #1 · #2}}#3\end{briefbox}\fi}
@@ -138,3 +120,6 @@
   \end{tcolorbox}
   \caption{\textcolor{ink2}{Placeholder: #2.}}\label{fig:#1}\end{figure}}
 \newcommand{\todo}[1]{\ifdraft\textcolor{brick}{\sffamily\footnotesize[#1]}\fi}
+% A source the team has read but not yet entered in refs.bib. Shows in the final
+% build too, as [?], so a missing reference can never slip through unnoticed.
+\newcommand{\needcite}[1]{\ifdraft\textcolor{brick}{\sffamily\footnotesize[cite: #1]}\else[?]\fi}
