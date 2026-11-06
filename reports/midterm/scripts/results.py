@@ -244,7 +244,7 @@ def write_model_table(m, floor):
         lines.append(rf"{name} & {r.mae:.0f} & {r.r2:.2f} & {r.mdape_ask:.1f} & {r.mdape_true:.1f} \\")
     lines += [
         r"\midrule",
-        rf"\textit{{The listing's own asking rent}} & {{---}} & {{---}} & {{---}} & {floor:.1f} \\",
+        rf"The listing's own asking rent & {{---}} & {{---}} & {{---}} & {floor:.1f} \\",
         r"\bottomrule",
         r"\end{tabular}",
     ]

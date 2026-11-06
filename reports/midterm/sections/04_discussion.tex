@@ -10,9 +10,10 @@ the synthetic data records the true market rent, we could also show that the rem
 noise in the listings but missing information about each building. Finally, we found that
 concession types are already recorded, so the work in concession extraction lies in recovering their
 value. However, these results cannot be considered representative of actual rental market
-conditions, and they need to be confirmed on real data.
+conditions, and they need to be confirmed on real data. Accolade has now delivered the real Dwellsy
+listings, and we are moving our pipeline over to them.
 
-\subsection{Future work through April}
+\subsection{Future Work}
 
 Our next steps build directly on these results:
 \begin{itemize}
@@ -35,5 +36,6 @@ Our next steps build directly on these results:
   \item \textbf{Phase 2.} We will continue with concession extraction and the demand-based price
   recommendation, for which we are considering survival models such as Random Survival
   Forests~\autocite{ishwaran2008random} and DeepSurv~\autocite{katzman2018deepsurv}.
-  \item \textbf{Real data.} Finally, we will rerun the full pipeline on the real Dwellsy data.
+  \item \textbf{Real data.} With the real Dwellsy data now delivered, our immediate priority is to rerun
+  the full pipeline on it, starting with Chicago.
 \end{itemize}
