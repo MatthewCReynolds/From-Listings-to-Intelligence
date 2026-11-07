@@ -1,0 +1,43 @@
+% From Listings to Intelligence: midterm report.
+% Build: `make` (draft, with writing briefs) or `make final` (clean copy).
+\documentclass[11pt, letterpaper]{article}
+\input{preamble}
+\input{generated/numbers}
+\ifdefined\finalbuild \draftfalse \fi
+
+\begin{document}
+
+\titleblock
+  {Midterm Report: From Listings to Intelligence}
+  {Team 24: Maria Gonzalez Llama (mgg2173), Viviana Hanampa Castillo (vsh2108),\\
+   Shikha Mehta (sjm2291), Matthew Reynolds (mcr2235), Lady Infante Acosta (ldi2101)}
+  {\today}
+
+\begin{abstract}
+Accolade, a property management platform, is developing a revenue management product to help
+property owners price their units correctly, so that they neither underprice their apartments nor
+overprice them and leave them sitting vacant. This report describes our progress on the first phase
+of that product, a market rent estimate. Because the real listing data was not yet available, we
+worked with a synthetic dataset provided by Accolade, which mirrors the structure of the expected
+data and, unlike real data, also records the true market rent behind every listing. We merged
+\nMasterTables{} of its \nSourceTables{} tables into a master table of \nMasterRows{} listings,
+separated the variables known when a unit is listed from those that reveal its price, and trained
+models on \nTrainBuildings{} buildings before testing them on \nTestBuildings{} others. Gradient
+boosting predicts the asking rent with a median absolute percentage error of \gbmMdape{}, compared
+with \baseMdape{} for a simple baseline. Since asking rent sits within \noiseFloor{} of the true
+market rent, most of the remaining error comes from information our variables do not yet capture,
+which motivates the comparable-property selection we plan next.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_methods}
+\input{sections/03_results}
+\input{sections/04_discussion}
+\input{sections/05_contributions}
+
+\printbibliography[heading=bibintoc, title={References}]
+
+\appendix
+\input{sections/appendix}
+
+\end{document}
