@@ -144,8 +144,9 @@ an \(R^2\) of 0.55 on held-out buildings.
 
 \subsection{Models}\label{sec:models}
 
-Our models predict the first asking rent of a listing, the price posted when the unit comes on the
-market. As inputs we use \nFeatures{} numerical variables known at that point: unit size, bedrooms,
+Our initial models, developed using synthetic data, predict the first asking rent of a listing, 
+the price posted when the unit comes on the market. As inputs we use \nFeatures{} numerical 
+variables known at that point: unit size, bedrooms,
 bathrooms, and floor; the building's amenities, review score, size, age, and application fee; its
 location; and the number of units sharing the floor plan. We compared three models: linear
 regression as an interpretable reference, a decision tree for its readable splits, and gradient
@@ -154,6 +155,14 @@ with the median for linear regression and the decision tree, while gradient boos
 scikit-learn's histogram-based gradient boosting~\autocite{ke2017lightgbm, pedregosa2011scikit},
 handles them natively. As a reference point, we also include a naive baseline that predicts the
 median rent for the listing's market and bedroom count. \Cref{app:models} lists the settings.
+
+Using the recently received Dwellsy data, we also ran an initial comparison of five 
+regression models on the Chicago listings: linear regression, decision tree, random
+forest, histogram-based gradient boosting, and a dummy regressor as a baseline. At 
+this stage, the models use eight predictors describing unit characteristics,
+location, and listing date. We evaluated performance on a validation set made up of
+rental units that were not used for training. These results provide an initial benchmark
+for further model development and evaluation.
 
 \subsection{Concession extraction}\label{sec:concession-methods}
 
