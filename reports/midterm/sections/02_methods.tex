@@ -80,6 +80,8 @@ model given these columns would score almost perfectly and learn nothing~\autoci
   \label{fig:leakage}
 \end{figure}
 
+Once the real Dwellsy data became available, we began preprocessing the Chicago listings by removing observations with invalid or implausible values, handling missing data, and preparing the variables for modeling. The resulting dataset consists of 545,312 observations corresponding to 152,233 unique rental units. To avoid data leakage across repeated listings of the same unit, we split the data into training, validation, and test sets grouped by rental unit identifier.
+
 \subsection{Exploratory data analysis}\label{sec:eda}
 
 Our exploratory analysis focused on how rent varies across markets, unit types, and buildings, and on
