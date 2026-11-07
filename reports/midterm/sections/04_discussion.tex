@@ -11,7 +11,9 @@ noise in the listings but missing information about each building. Finally, we f
 concession types are already recorded, so the work in concession extraction lies in recovering their
 value. However, these results cannot be considered representative of actual rental market
 conditions, and they need to be confirmed on real data. Accolade has now delivered the real Dwellsy
-listings, and we are moving our pipeline over to them.
+listings, and we have begun training and evaluating models using the Chicago data. Our preliminary
+results identify gradient boosting as a promising candidate, but further refinement and evaluation 
+are needed.
 
 \subsection{Future Work}
 
@@ -24,8 +26,8 @@ Our next steps build directly on these results:
   \item \textbf{Combined variables.} We will merge the numerical and categorical variables under the
   same exclusion rules, starting with property class, and train with cross-validation grouped by
   property.
-  \item \textbf{Additional models.} Beyond gradient boosting, we plan to evaluate Random Forest,
-  XGBoost, and LightGBM, consider stacking based on their performance, and tune hyperparameters with
+  \item \textbf{Additional models.} Beyond gradient boosting, we plan to further evaluate Random Forest
+  and explore XGBoost and LightGBM, consider stacking based on their performance, and tune hyperparameters with
   Optuna~\autocite{akiba2019optuna}.
   \item \textbf{Ranges and explanations.} Every estimate needs a range and its reasons, so we will add
   quantile or conformal prediction intervals~\autocite{angelopoulos2023gentle}, report their coverage,
@@ -36,6 +38,8 @@ Our next steps build directly on these results:
   \item \textbf{Phase 2.} We will continue with concession extraction and the demand-based price
   recommendation, for which we are considering survival models such as Random Survival
   Forests~\autocite{ishwaran2008random} and DeepSurv~\autocite{katzman2018deepsurv}.
-  \item \textbf{Real data.} With the real Dwellsy data now delivered, our immediate priority is to rerun
-  the full pipeline on it, starting with Chicago.
+  \item \textbf{Real data.} With the real Dwellsy data now delivered, we have begun preparing
+  and analyzing the Chicago listings and evaluating preliminary models. Our next priority
+  is to refine these models, explore additional features, and conduct a final evaluation
+  on the held-out test set.
 \end{itemize}

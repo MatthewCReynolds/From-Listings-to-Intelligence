@@ -110,6 +110,42 @@ offering free months reach \concMonthsFree{}.
 
 All of our code and outputs are shared through the team's GitHub repository. Three commands rebuild
 the master table from the public download, and 59 join checks verify that the merged table is
-complete and consistent. This report is generated from the same code: every number in the text,
-every table, and every figure is recomputed from the data, so the report stays consistent with the
-models behind it.
+complete and consistent. The synthetic-data results in this report are generated from the
+same code: every number, table, and figure related to that analysis is recomputed from the data,
+keeping the report consistent with the models behind it.
+
+
+\subsection{Preliminary results on real Dwellsy data}\label{sec:real-results}
+
+We started by evaluating five models using property characteristics, ZIP codes, and temporal
+information. \Cref{tab:real-models} summarizes their validation performance.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Preliminary validation performance on real Chicago rental listings.}
+  \label{tab:real-models}
+  \begin{tabular}{lrrr}
+    \hline
+    Model & MAE (\$) & RMSE (\$) & $R^2$ \\
+    \hline
+    Gradient Boosting & 229.22 & 396.24 & 0.8331 \\
+    Random Forest & 291.17 & 464.58 & 0.7706 \\
+    Linear Regression & 334.62 & 551.74 & 0.6764 \\
+    Decision Tree & 345.79 & 533.11 & 0.6979 \\
+    Dummy Regressor & 668.83 & 969.97 & -0.0002 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Gradient Boosting resulted in the strongest preliminary model, achieving the lowest prediction
+errors and the highest R-squared on the validation set. These initial findings suggest that
+nonlinear models are better suited to capturing relationships among rental prices, property
+characteristics, and location. However, we still need to refine these models and explore other
+alternatives before selecting a final approach.
+
+We also developed a Ridge regression model incorporating nonlinear spline transformations of
+latitude and longitude to assess whether geographic coordinates provide additional predictive
+information beyond ZIP codes. Adding these variables reduced validation MAE by approximately
+\$1.78 and increased R-squared by 0.0024 compared with the model without coordinates. Although
+the improvement was relatively small, this analysis provided an initial assessment of the
+geographic component of rental prices.

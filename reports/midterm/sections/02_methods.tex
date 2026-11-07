@@ -6,12 +6,10 @@ The original project proposal described a prepared seed dataset covering two to 
 markets, roughly 10,000 to 20,000 buildings and 500,000 listing observations, together with
 concession text, property photos, and analyst-curated comparable sets. During our first meetings,
 however, we learned that the real data was not yet available and that we would begin with synthetic
-data. Following Accolade's guidance, the synthetic data is used only for pipeline development and
-testing, not for model selection or tuning, and all of the analysis in this report is based on
-it. The real listing data has only just arrived, and we are now switching our work over to
-it.\footnote{Accolade delivered a trial extract from Dwellsy, the listing provider, on October 22.
+data. Following Accolade's guidance, the synthetic data was used for pipeline development and
+testing, not for model selection or tuning. The real Dwellsy listing data only arrived recently, leaving limited time for its analysis before this report. Nevertheless, we have started cleaning and exploring the Chicago data and conducted an initial comparison of predictive models. These results are preliminary and require further validation and refinement.\footnote{Accolade delivered a trial extract from Dwellsy, the listing provider, on October 22.
 It covers \dwListings{} listings of \dwUnits{} rental units in the Chicago and Washington, DC
-metropolitan areas between \dwStart{} and \dwEnd{}. As advised, it is not used in this report.}
+metropolitan areas between \dwStart{} and \dwEnd{}. Our initial analysis of the real data focuses on the Chicago metropolitan area.}
 
 The synthetic data was built to conform to the structure of the real data: a market-relative
 dataset, which mirrors the Dwellsy listings feed, and a demand pricing dataset, which mirrors a
@@ -82,9 +80,11 @@ model given these columns would score almost perfectly and learn nothing~\autoci
   \label{fig:leakage}
 \end{figure}
 
+Once the real Dwellsy data became available, we began preprocessing the Chicago listings by removing observations with invalid or implausible values, handling missing data, and preparing the variables for modeling. The resulting dataset consists of 545,312 observations corresponding to 152,233 unique rental units. To avoid data leakage across repeated listings of the same unit, we split the data into training, validation, and test sets grouped by rental unit identifier.
+
 \subsection{Exploratory data analysis}\label{sec:eda}
 
-Our exploratory analysis focused on how rent varies across markets, unit types, and buildings, and on
+Our exploratory analysis of the synthetic data focused on how rent varies across markets, unit types, and buildings, and on
 which variables carry information about it. Median asking rent is \medRentDc{} in DC,
 \medRentChicago{} in Chicago, and \medRentDfw{} in Dallas--Fort Worth (\cref{fig:map}). Between
 \firstYear{} and \lastYear{} it rose by \growthChicago{} in Chicago and \growthDc{} in DC, while in
@@ -144,8 +144,9 @@ an \(R^2\) of 0.55 on held-out buildings.
 
 \subsection{Models}\label{sec:models}
 
-Our models predict the first asking rent of a listing, the price posted when the unit comes on the
-market. As inputs we use \nFeatures{} numerical variables known at that point: unit size, bedrooms,
+Our initial models, developed using synthetic data, predict the first asking rent of a listing, 
+the price posted when the unit comes on the market. As inputs we use \nFeatures{} numerical 
+variables known at that point: unit size, bedrooms,
 bathrooms, and floor; the building's amenities, review score, size, age, and application fee; its
 location; and the number of units sharing the floor plan. We compared three models: linear
 regression as an interpretable reference, a decision tree for its readable splits, and gradient
@@ -154,6 +155,14 @@ with the median for linear regression and the decision tree, while gradient boos
 scikit-learn's histogram-based gradient boosting~\autocite{ke2017lightgbm, pedregosa2011scikit},
 handles them natively. As a reference point, we also include a naive baseline that predicts the
 median rent for the listing's market and bedroom count. \Cref{app:models} lists the settings.
+
+Using the recently received Dwellsy data, we also ran an initial comparison of five 
+regression models on the Chicago listings: linear regression, decision tree, random
+forest, histogram-based gradient boosting, and a dummy regressor as a baseline. At 
+this stage, the models use eight predictors describing unit characteristics,
+location, and listing date. We evaluated performance on a validation set made up of
+rental units that were not used for training. These results provide an initial benchmark
+for further model development and evaluation.
 
 \subsection{Concession extraction}\label{sec:concession-methods}
 

@@ -26,7 +26,9 @@ models on \nTrainBuildings{} buildings before testing them on \nTestBuildings{} 
 boosting predicts the asking rent with a median absolute percentage error of \gbmMdape{}, compared
 with \baseMdape{} for a simple baseline. Since asking rent sits within \noiseFloor{} of the true
 market rent, most of the remaining error comes from information our variables do not yet capture,
-which motivates the comparable-property selection we plan next.
+which motivates the comparable-property selection we plan next. With the real Dwellsy data
+now available, we have also begun evaluating models on Chicago rental listings, where gradient
+boosting has shown promising preliminary validation results.
 \end{abstract}
 
 \input{sections/01_introduction}
