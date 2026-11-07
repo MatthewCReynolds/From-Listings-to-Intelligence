@@ -6,12 +6,10 @@ The original project proposal described a prepared seed dataset covering two to 
 markets, roughly 10,000 to 20,000 buildings and 500,000 listing observations, together with
 concession text, property photos, and analyst-curated comparable sets. During our first meetings,
 however, we learned that the real data was not yet available and that we would begin with synthetic
-data. Following Accolade's guidance, the synthetic data is used only for pipeline development and
-testing, not for model selection or tuning, and all of the analysis in this report is based on
-it. The real listing data has only just arrived, and we are now switching our work over to
-it.\footnote{Accolade delivered a trial extract from Dwellsy, the listing provider, on October 22.
+data. Following Accolade's guidance, the synthetic data was used for pipeline development and
+testing, not for model selection or tuning. The real Dwellsy listing data only arrived recently, leaving limited time for its analysis before this report. Nevertheless, we have started cleaning and exploring the Chicago data and conducted an initial comparison of predictive models. These results are preliminary and require further validation and refinement.\footnote{Accolade delivered a trial extract from Dwellsy, the listing provider, on October 22.
 It covers \dwListings{} listings of \dwUnits{} rental units in the Chicago and Washington, DC
-metropolitan areas between \dwStart{} and \dwEnd{}. As advised, it is not used in this report.}
+metropolitan areas between \dwStart{} and \dwEnd{}. Our initial analysis of the real data focuses on the Chicago metropolitan area.}
 
 The synthetic data was built to conform to the structure of the real data: a market-relative
 dataset, which mirrors the Dwellsy listings feed, and a demand pricing dataset, which mirrors a
