@@ -1,0 +1,319 @@
+feature,dtype,feature_type,completeness_pct,univariate_pass,bivariate_pass,multivariate_pass,selection_status,final_selected
+unit_id,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+property_id,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+floor_plan_id,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_unit__unit_name,string,categorical,89.22,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_unit__floorplan_name,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_unit__bed,int64,numeric,100.0,True,True,False,Removed at multivariate stage (redundant),False
+market_unit__bath,int64,numeric,100.0,True,True,True,Passed all three stages,True
+market_unit__partial_bath,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+market_unit__sqft,float64,numeric,95.67,True,True,True,Passed all three stages,True
+market_unit__days_on_market,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+market_unit__availability,datetime64[ns],datetime,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_unit__enter_market,datetime64[ns],datetime,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_unit__exit_market,datetime64[ns],datetime,96.29,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_unit__created_on,datetime64[us],datetime,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_unit__url,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_unit__status,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_lease_event__physical_unit_id,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_lease_event__outcome,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_lease_event__true_lease_start,datetime64[ns],datetime,96.29,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_lease_event__true_lease_end,datetime64[ns],datetime,96.29,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_lease_event__true_term_months,float64,numeric,96.29,True,False,False,Rejected at bivariate stage,False
+truth_lease_event__true_rent,float64,numeric,96.29,True,True,False,Removed at multivariate stage (redundant),False
+truth_lease_event__true_concession_monthly,float64,numeric,96.29,True,False,False,Rejected at bivariate stage,False
+truth_lease_event__true_effective_rent,float64,numeric,96.29,True,True,False,Removed at multivariate stage (redundant),False
+truth_lease_event__true_move_in,datetime64[ns],datetime,96.29,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_lease_event__inferred_lease_start,datetime64[ns],datetime,96.29,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_lease_event__inferred_lease_end,datetime64[ns],datetime,96.29,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_lease_event__inferred_term_months,float64,numeric,96.29,False,False,False,Rejected at univariate stage,False
+truth_lease_event__true_market_rent_at_signing,float64,numeric,96.29,True,True,False,Removed at multivariate stage (redundant),False
+market_floor_plan__unit_count,int64,numeric,100.0,True,True,True,Passed all three stages,True
+market_building__submarket,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__street_address,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__building_name,string,categorical,96.55,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__city,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__state,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__zip_code,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__msa,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__lat,float64,numeric,100.0,True,True,True,Passed all three stages,True
+market_building__lon,float64,numeric,100.0,True,True,True,Passed all three stages,True
+market_building__property_class,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__number_units,float64,numeric,93.81,True,True,False,Removed at multivariate stage (redundant),False
+market_building__year_built,float64,numeric,89.22,True,False,False,Rejected at bivariate stage,False
+market_building__number_stories,float64,numeric,72.39,True,False,False,Rejected at bivariate stage,False
+market_building__number_stories_prediction,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__management_company,string,categorical,88.21,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__building_website,string,categorical,84.99,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__is_apartment,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__is_condo,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__is_single_family,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__is_student,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__is_senior,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__is_affordable,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__is_build_to_rent,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__is_lease_up,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__avg_price_duration_days,float64,numeric,100.0,True,True,True,Passed all three stages,True
+market_building__avg_price_change,float64,numeric,100.0,True,True,True,Passed all three stages,True
+market_building__avg_time_on_market_days,float64,numeric,99.99,True,False,False,Rejected at bivariate stage,False
+market_building__count_prices,int64,numeric,100.0,True,True,True,Passed all three stages,True
+market_building__is_using_rev_management,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__count_reviews,int64,numeric,100.0,True,True,False,Removed at multivariate stage (redundant),False
+market_building__avg_review_score,float64,numeric,100.0,True,True,True,Passed all three stages,True
+market_building__positive_staff_and_management,int64,numeric,100.0,True,True,False,Removed at multivariate stage (redundant),False
+market_building__negative_staff_and_management,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+market_building__positive_amenities_and_features,int64,numeric,100.0,True,True,False,Removed at multivariate stage (redundant),False
+market_building__negative_amenities_and_features,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+market_building__positive_cleanliness_and_maintenance,int64,numeric,100.0,True,True,True,Passed all three stages,True
+market_building__negative_cleanliness_and_maintenance,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+market_building__positive_location,int64,numeric,100.0,True,True,False,Removed at multivariate stage (redundant),False
+market_building__negative_location,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+market_building__positive_value,int64,numeric,100.0,True,True,False,Removed at multivariate stage (redundant),False
+market_building__negative_value,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+market_building__n_building_amenities,float64,numeric,82.79,True,True,True,Passed all three stages,True
+market_building__n_unit_amenities,float64,numeric,82.79,True,True,False,Removed at multivariate stage (redundant),False
+market_building__amen__24_hour_maintenance,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__accepts_housing_voucher,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__ada_compliant,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__additional_storage_space_outside_unit,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__art_studio,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__attached_garage,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__barbecue_grill,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__basketball_court,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__bike_rack,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__bilingual,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__boat_dock,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__bocceball_court,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__business_center,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__cabana,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__carport,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__cats_allowed,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__club_house_party_room,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__community_chef_kitchen_space,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__community_dog_park,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__community_garden,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__community_pet_washing_station,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__community_room,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__community_wifi,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__computer_lab,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__concierge,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__controlled_access,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__corporate_suite,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__courtyard,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__daycare,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__detached_garage,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__disposal_chutes,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__dogs_allowed,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__doorman,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__electric_car_charging_station,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__elevator,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__fire_pit,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__fitness_center,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__foosball,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__game_room,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__gated_community_access,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__golf_simulator,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__green_community,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__guest_parking,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__guest_suite,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__historic_building,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__hot_tub,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__housekeeping_available,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__income_restricted,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__internet_lounge,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__landscaping,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__laundry_room,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__laundry_service,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__library,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__lobby,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__lounge,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__massage_room,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__multimedia_center,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__non_smoking,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__on_site_car_wash,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__on_site_maintenance,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__on_site_management,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__one_car_garage,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__online_payment_portal,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__organic_waste_composting,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__package_lockers,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__package_receiving,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__parking_garage,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__parking_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__pet_daycare_service,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__pets_allowed,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__pickleball_court,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__picnic_area,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__playground,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__pool_table,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__putting_green,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__racquetball_court,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__recycling,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__reserved_parking,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__resident_events,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__resident_referral_program,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__resident_rewards_program,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__rock_climbing_wall,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__rooftop_space,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__roommate_matching,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__satisfaction_guaranteed,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__sauna,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__secure_resident_parking,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__secured_covered_bike_storage,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__security_system,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__shared_office_space,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__short_term_lease_options,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__shuffle_board,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__snow_removal,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__soccer_field,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__spa,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__sport_court,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__sunroom,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__swimming_pool,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__table_tennis,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__tanning_beds,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__tennis_court,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__terrace,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__two_car_garage,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__valet_trash_service,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__volleyball_court,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__waterfront,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__workshop,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__yoga_studio,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__amen__zen_garden,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__air_conditioning,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__all_appliances_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__all_utilities_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__attic,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__backsplash,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__basement,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__bath_tub,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__bay_window,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__black_appliances,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__breakfast_bar,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__built_in_desk,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__carpet,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__ceiling_fan,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__central_air_conditioning,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__central_heat,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__city_view,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__concrete_floor,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__courtyard_view,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__crown_molding,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__custom_cabinets,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__deck,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__den,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__dining_room,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__dishwasher,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__double_sink_vanity,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__eat_in_kitchen,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__efficient_appliances,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__electricity_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__faux_wood_floor,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__fireplace,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__floor_to_ceiling_windows,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__french_doors,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__fully_upgraded,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__furnished,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__garbage_disposal,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__granite_countertops,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__hardwood_floor,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__heat_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__high_ceilings,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__in_wall_usb_ports,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__individual_locking_bedrooms,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__internet_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__kitchen_island,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__large_bathrooms,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__large_bedrooms,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__large_closets,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__large_windows,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__linoleum_floor,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__living_room,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__loft,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__marble_countertops,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__microwave,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__mountain_view,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__mud_room,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__nature_view,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__open_floor_plan,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__oven,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__pantry,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__patio_or_balcony,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__porch,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__private_bathroom,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__private_entrance,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__quartz_countertops,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__ranch_style,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__range,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__recently_renovated,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__refrigerator,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__sewer_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__skylight,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__smart_doorbell,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__smart_lighting,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__smart_locks,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__smart_thermostat,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__stainless_steel_appliances,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__stove,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__tile_floor,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__track_lighting,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__trash_compactor,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__trash_service_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__vaulted_ceilings,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__view,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__vinyl_floor,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__walk_in_closet,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__walk_in_shower,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__washer_dryer_hookups,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__washer_dryer_in_unit,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__water_included,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__water_view,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__white_appliances,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__window_ac_unit,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__window_covering,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_building__unitamen__yard,boolean,boolean,82.79,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__firm_sid,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__is_pms,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__property_class,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__quality_true,float64,numeric,100.0,True,True,True,Passed all three stages,True
+truth_building_params__amenity_score,float64,numeric,100.0,True,True,False,Removed at multivariate stage (redundant),False
+truth_building_params__pricing_policy,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__price_bias,float64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+truth_building_params__elasticity,float64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+truth_building_params__eps_building,float64,numeric,100.0,True,True,True,Passed all three stages,True
+truth_building_params__exposes_unit_level,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__is_lease_up_building,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__rent_controlled,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__concession_appetite,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__rent_roll_grouping_key,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__number_units_true,int64,numeric,100.0,True,True,True,Passed all three stages,True
+truth_building_params__year_built_true,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+truth_building_params__number_stories_true,int64,numeric,100.0,True,False,False,Rejected at bivariate stage,False
+truth_building_params__building_form,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+truth_building_params__product_type,string,categorical,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
+market_price_observation__n_windows,float64,numeric,99.96,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__n_price_changes,float64,numeric,99.96,True,True,True,Passed all three stages,True
+market_price_observation__last_asking_rent,float64,numeric,99.96,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__min_asking_rent,float64,numeric,99.96,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__max_asking_rent,float64,numeric,99.96,True,True,True,Passed all three stages,True
+market_price_observation__day_weighted_asking_rent,float64,numeric,99.96,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__first_effective_rent,float64,numeric,99.96,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__last_effective_rent,float64,numeric,99.96,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__day_weighted_effective_rent,float64,numeric,99.96,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__first_asking_rent_psf,float64,numeric,95.63,True,True,True,Passed all three stages,True
+market_price_observation__last_asking_rent_psf,float64,numeric,95.63,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__max_concession,float64,numeric,99.96,True,False,False,Rejected at bivariate stage,False
+market_price_observation__day_weighted_concession,float64,numeric,99.96,True,False,False,Rejected at bivariate stage,False
+market_price_observation__share_days_with_concession,float64,numeric,99.96,True,False,False,Rejected at bivariate stage,False
+market_price_observation__leased_asking_rent,float64,numeric,96.25,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__leased_effective_rent,float64,numeric,96.25,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__leased_asking_rent_psf,float64,numeric,92.07,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__leased_effective_rent_psf,float64,numeric,92.07,True,True,False,Removed at multivariate stage (redundant),False
+market_price_observation__leased_concession,float64,numeric,96.25,True,False,False,Rejected at bivariate stage,False
+market_leasing_activity_daily__leased_pct_at_enter,float64,numeric,90.49,True,False,False,Rejected at bivariate stage,False
+market_leasing_activity_daily__exposure_pct_at_enter,float64,numeric,90.49,True,True,True,Passed all three stages,True
+truth_floorplan_market_rent__true_market_rent_at_enter,float64,numeric,98.58,True,True,False,Removed at multivariate stage (redundant),False
+truth_floorplan_market_rent__true_market_rent_psf_at_enter,float64,numeric,98.58,True,True,False,Removed at multivariate stage (redundant),False
+pms_property__is_pms,boolean,boolean,100.0,True,False,False,Not evaluated by numeric bivariate criterion,False
