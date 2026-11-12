@@ -8,7 +8,7 @@ table can still rebuild both:
     generated/tables/*.tex             booktabs tables
     generated/data/*.csv               the inputs to every figure
 
-Models reproduce notebooks/phase_01_market_rent/06_model_training.ipynb exactly:
+Models reproduce notebooks/synthetic/phase_01_market_rent/09_model_training.ipynb exactly:
 same 13 features, same building-level split (seed 710), same hyperparameters.
 """
 
@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 
 import duckdb
+
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingRegressor
@@ -28,10 +29,9 @@ from sklearn.tree import DecisionTreeRegressor
 
 REPORT = Path(__file__).resolve().parent.parent
 REPO = REPORT.parent.parent
+GEN = REPORT / "generated"
 MASTER = REPO / "data" / "master_listing.parquet"
 CATALOG = REPO / "data" / "master_columns.csv"
-GEN = REPORT / "generated"
-
 SYNTH_DB = REPO / "data" / "accolade.duckdb"
 MANIFEST = REPO / "data" / "realistic-v2" / "meta" / "manifest.json"
 DWELLSY = REPO / "data" / "dwellsy" / "listings_all.parquet"
@@ -283,8 +283,8 @@ def funnel():
     cat = pd.read_csv(CATALOG)
     feat = cat[cat.role == "feature"]
     known = feat[~(feat.source_table.isin(POST_TABLES) | feat.column.isin(POST_COLS))]
-    num = pd.read_csv(REPO / "outputs" / "05_phase_01_numerical_final_features.csv")
-    cg = pd.read_csv(REPO / "outputs" / "07_phase_01_categorical_final_features.csv", index_col=0)
+    num = pd.read_csv(REPO / "outputs" / "synthetic" / "06_phase_01_numerical_final_features.csv")
+    cg = pd.read_csv(REPO / "outputs" / "synthetic" / "08_phase_01_categorical_final_features.csv", index_col=0)
     kept = int((num.decision == "keep").sum() + (cg.decision == "keep").sum())
     stages = pd.DataFrame([
         ("Columns in the master table", len(cat)),
@@ -378,9 +378,9 @@ def importance():
 
 def borrowed():
     """Results from earlier notebooks the report cites, copied so figures stay self-contained."""
-    cg = pd.read_csv(REPO / "outputs" / "07_phase_01_categorical_final_features.csv", index_col=0)
+    cg = pd.read_csv(REPO / "outputs" / "synthetic" / "08_phase_01_categorical_final_features.csv", index_col=0)
     cg.rename_axis("feature").reset_index().to_csv(GEN / "data" / "categorical_scores.csv", index=False)
-    cs = pd.read_csv(REPO / "outputs" / "01_phase_02_concession_extraction_summary.csv")
+    cs = pd.read_csv(REPO / "outputs" / "synthetic" / "01_phase_02_concession_extraction_summary.csv")
     cs.to_csv(GEN / "data" / "concession_summary.csv", index=False)
     o = cs[cs.slice_by == "overall"].iloc[0]
     src = cs[cs.slice_by == "text_source"].set_index("slice")

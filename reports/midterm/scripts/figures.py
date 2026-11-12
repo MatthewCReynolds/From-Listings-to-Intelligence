@@ -1,6 +1,6 @@
 """Render every report figure from the small files results.py writes.
 
-Reads only generated/data/, never the master table, so anyone with the repo can
+Reads only reports/midterm/generated/data/, never the master table, so anyone with the repo can
 rebuild the figures. Add a figure by writing a function and listing it in FIGURES.
 
     python scripts/figures.py            # all figures

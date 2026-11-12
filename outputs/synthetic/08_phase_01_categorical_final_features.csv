@@ -1,0 +1,11 @@
+,eta_sq,eta_sq_null,eta_sq_excess,mi_coef,within_eta_sq,perm_dMAE,completeness_pct,grain,decision,reason,redundant_with
+market_building__property_class,0.2974,0.0,0.2974,0.6073,0.0,168.9816,100.0,building,keep,,
+market_building__zip_code,0.2841,0.0008,0.2833,0.6169,0.0,74.8792,100.0,building,keep,,
+market_unit__floorplan_name,0.1105,0.0047,0.1058,0.571,0.2225,25.054,100.0,listing,keep,,
+market_building__submarket,0.2269,0.0003,0.2266,0.5502,0.0,22.4062,100.0,building,drop,overlapping (Cramer's V 0.9666); kept the stronger,market_building__zip_code
+market_unit__unit_name,0.1506,0.0199,0.1307,0.3415,0.1993,16.8089,89.22,listing,keep,,
+market_building__city,0.1949,0.0002,0.1948,0.4997,0.0,4.1605,100.0,building,drop,market_building__zip_code refines market_building__city (Cramer's V 0.9997); kept the stronger,market_building__zip_code
+market_building__number_stories_prediction,0.007,0.0,0.007,0.1272,0.0,4.0255,100.0,building,keep,,
+market_building__management_company,0.1603,0.0007,0.1596,0.509,0.0,3.1698,88.17,building,keep,,
+market_building__msa,0.1731,0.0,0.1731,0.4388,0.0,0.1086,100.0,building,drop,market_building__zip_code refines market_building__msa (Cramer's V 0.9996); kept the stronger,market_building__zip_code
+market_building__state,0.1839,0.0,0.1839,0.4459,0.0,-0.3732,100.0,building,drop,no held-out gain (perm_dMAE <= 0.0),

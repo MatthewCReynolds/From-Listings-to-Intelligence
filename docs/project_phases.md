@@ -92,14 +92,14 @@ Done so far:
 
 | Work | File |
 |---|---|
-| Master table, one row per listing, 967,661 × 378 | `preprocessing/build_master.py` |
-| Standardized column types | `preprocessing/standardize_types.py` |
-| 59 join checks, all passing | `notebooks/phase_01_market_rent/01_master_table_check.ipynb` |
-| Completeness and type of all 378 variables | `notebooks/phase_01_market_rent/02_feature_funnel.ipynb` |
-| Feature scoring: Gini, gradient boosting, Lasso | `notebooks/phase_01_market_rent/03_feature_selection_numerical.ipynb` |
-| Correlations and redundant pairs, Excel report | `notebooks/phase_01_market_rent/04_numerical_correlations.ipynb` |
-| Decision table for all 108 numerical variables (scores, correlations, suggested and user decisions), profile and plots of the kept ones | `notebooks/phase_01_market_rent/05_numerical_final_selection.ipynb` |
-| Numeric feature analysis | `preprocessing/analyze_numeric.py` (branch `shikha-edits`) |
+| Master table, one row per listing, 967,661 × 378 | `pipeline/synthetic/build_master.py` |
+| Standardized column types | `pipeline/synthetic/standardize_types.py` |
+| 59 join checks, all passing | `notebooks/synthetic/phase_01_market_rent/01_master_table_check.ipynb` |
+| Completeness and type of all 378 variables | `notebooks/synthetic/phase_01_market_rent/02_feature_funnel.ipynb` |
+| Feature scoring: Gini, gradient boosting, Lasso | `notebooks/synthetic/phase_01_market_rent/03_numerical_selection.ipynb` |
+| Correlations and redundant pairs, Excel report | `notebooks/synthetic/phase_01_market_rent/04_numerical_correlations.ipynb` |
+| Decision table for all 108 numerical variables (scores, correlations, suggested and user decisions), profile and plots of the kept ones | `notebooks/synthetic/phase_01_market_rent/06_numerical_final_selection.ipynb` |
+| Numeric feature analysis | `pipeline/synthetic/analyze_numeric.py` |
 
 Still to fix before modeling:
 
@@ -108,7 +108,7 @@ Still to fix before modeling:
   The other 13 `leaky` price columns stay out of X.
 - **Answer key.** Keep `truth_floorplan_market_rent__true_market_rent_at_enter` to check results against.
 - **Inputs.** Drop `pms_property__*` from X (rule 3). Keep only features known when the unit is listed (rule 1).
-- **Re-run** `eda/03` and `eda/04` with these changes. Add `market_building__year_built` back: the
+- **Re-run** `notebooks/synthetic/phase_01_market_rent/06_numerical_final_selection.ipynb` and `notebooks/synthetic/phase_01_market_rent/09_model_training.ipynb` with these changes. Add `market_building__year_built` back: the
   plan weights vintage at 0.10, and gradient boosting and Lasso both kept it.
 
 Output: the final feature list, with each feature's completeness, Gini, gradient-boosting importance,
@@ -172,7 +172,7 @@ masked attributes, rent-controlled buildings (DC).
 
 - **12-month rent forecast** per market (plan 4.4). Start with the plan's minimum baseline:
   a drift model with ±1.96σ intervals.
-- **Time to lease.** Survival model in `model/survival_quick.py` (marked unvalidated).
+- **Time to lease.** Survival model in `pipeline/synthetic/survival_quick.py` (marked unvalidated).
 - **Entity resolution** (plan 1.2): a pairwise "same building?" classifier on name/address pairs.
   `market.building_alias` gives labeled duplicates. `pms.property` and `pms.comp_property` carry
   the true `property_id`, so they give labels for linking a customer's property to its market record.

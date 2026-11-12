@@ -1,33 +1,55 @@
 # Notebooks
 
-## Layout and run order
+Run each track in order. Every notebook starts with the same three cells: a description (data,
+inputs, outputs, what to run first), a parameters cell, and a setup cell that imports `libs/`.
+Tables and figures go to `outputs/synthetic/` or `outputs/real/`, named
+`<notebook number>_phase_<phase>_<name>`.
 
-Phase 1 market rent analysis lives in `phase_01_market_rent/` and runs in order:
+## Synthetic data (`synthetic/`)
 
-1. `01_master_table_check.ipynb`
-2. `02_feature_funnel.ipynb`
-3. `03_feature_selection_numerical.ipynb`
-4. `04_numerical_correlations.ipynb`
-5. `05_numerical_final_selection.ipynb` (after 04; applies your numerical decisions)
-6. `08_numerical_edav.ipynb` (after 04, independent of 05; explores numerical-variable distributions,
-   missingness, correlations, and monthly rent; writes `edav_summary.csv` and six PNG figures)
+Needs `data/master_listing.parquet` and `data/master_columns.csv` (see `data/README.md`).
 
-Phase 2 planning notes live in `phase_02_price_recommendation/`. No Phase 2 code exists yet.
+Phase 1, market rent (`synthetic/phase_01_market_rent/`):
+
+1. `01_master_table_check` checks row counts, keys, and missing values in the master table.
+2. `02_feature_funnel` sorts every column by type and role (predictor, leakage, identifier).
+3. `03_numerical_selection` scores the numerical predictors with Gini, gradient boosting, and Lasso.
+   Needs 02.
+4. `04_numerical_correlations` finds redundant numerical pairs and writes the correlation workbook.
+   Needs 03.
+5. `05_numerical_eda` plots distributions, missingness, correlations, and monthly rent of the
+   candidates. Needs 03 and 04.
+6. `06_numerical_final_selection` applies the team's decisions in `numerical_decisions.csv` and checks
+   stability by city. Needs 03 and 04.
+7. `07_staged_selection_funnel` runs the univariate, bivariate, and multivariate selection stages.
+8. `08_categorical_selection` scores the categorical predictors (eta², Cramér's V, held-out importance)
+   with `pipeline/synthetic/analyze_categorical.py`.
+9. `09_model_training` trains and compares linear regression, a decision tree, and gradient boosting.
+
+Phase 2, price recommendation (`synthetic/phase_02_price_recommendation/`):
+
+1. `01_concession_extraction` extracts concessions from the specials text with
+   `pipeline/synthetic/extract_concessions.py` and scores them against the truth layer.
+
+## Real data (`real/`)
+
+Needs the Dwellsy exports in `data/real/chicago/` and `data/real/dc/` (see `data/README.md`).
+Intermediate data files go to `data/processed/`.
+
+Phase 1, market rent (`real/phase_01_market_rent/`):
+
+1. `01_data_exploration` counts the listings in both markets and saves a Chicago sample.
+2. `02_data_preparation` cleans the Chicago listings and writes `data/processed/chicago_prepared_full.csv`.
+3. `03_categorical_analysis` measures how categorical features and amenities relate to rent (eta²).
+4. `04_geospatial_features` builds point-of-interest counts and distances from OpenStreetMap. The first
+   run downloads the state extracts from Geofabrik to `data/osm/`.
+5. `05_baseline_models` trains and compares the first regression models on Chicago. Needs 02.
+6. `06_geospatial_model` fits a Ridge regression with spline terms on latitude and longitude. Needs 02.
 
 ## Parameters and filters
 
-Each notebook has a parameter cell for `INPUT`, `OUTPUT_DIR`, and optional `CITY`, `NEIGHBORHOOD`, `START_DATE`, `END_DATE`, and `DATE_COLUMN`. City and neighborhood accept a string or list. Dates keep listings whose selected date is on or after the start and on or before the end. Filtered output names use `__city__neighborhood__start_to_end`; unset parts are omitted (for example, `__chicago__2023-01-01_to_end`).
-
-Notebook specific scoring and reporting thresholds are in the same parameter cell. All CSV, XLSX, and PNG outputs go to `outputs/`.
-
-
-## Numerical feature decisions
-
-After running notebooks 03 and 04, run `05_numerical_final_selection.ipynb`. It scores and reports all
-108 numerical variables, correlates them with asking rent, and writes
-`outputs/05_phase_01_numerical_decision_table{suffix}.csv`. The table includes automatic suggestions
-and the final decisions used by the profile and plots.
-
-Notebook 05 creates `notebooks/phase_01_market_rent/numerical_decisions.csv` if it does not exist. Fill
-`my_decision` with `keep` or `drop` for each variable, and optionally add a `comment`. A blank decision
-uses the notebook's suggestion. The notebook never overwrites this file; edit it by hand and rerun 05.
+Change values only in the parameters cell. The synthetic notebooks accept `CITY`, `NEIGHBORHOOD`,
+`START_DATE`, `END_DATE`, and `DATE_COLUMN`. City and neighborhood take a string or a list; dates keep
+listings whose `DATE_COLUMN` falls between the start and the end, inclusive. Active filters are added
+to the output names, for example `03_phase_01_feature_selection_numerical__chicago__2023-01-01_to_end.csv`,
+so filtered runs never overwrite the full run.

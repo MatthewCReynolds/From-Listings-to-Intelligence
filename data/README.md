@@ -3,8 +3,8 @@
 The dataset is **not** in git (1.5 GB unpacked). Fetch it locally:
 
 ```bash
-python preprocessing/download_data.py   # downloads + checksums + unpacks
-python preprocessing/build_duckdb.py    # builds data/accolade.duckdb
+python pipeline/synthetic/download_data.py   # downloads + checksums + unpacks
+python pipeline/synthetic/build_duckdb.py    # builds data/accolade.duckdb
 ```
 
 ## Layout
@@ -36,8 +36,8 @@ generator machine's absolute paths. `build_duckdb.py` regenerates them against l
 ## Master table
 
 ```bash
-python preprocessing/build_master.py     # ~15 s -> data/master_listing.parquet (161 MB)
-python preprocessing/standardize_types.py              # Standardize dtypes -> update master_columns.csv
+python pipeline/synthetic/build_master.py     # ~15 s -> data/master_listing.parquet (161 MB)
+python pipeline/synthetic/standardize_types.py              # Standardize dtypes -> update master_columns.csv
 ```
 
 `data/master_listing.parquet` — **one row per listing episode** (`market/unit`), 967,661 rows x 378 columns.
@@ -108,3 +108,10 @@ Requires `pyarrow >= 20`; the files are written by Arrow 24, and pyarrow 19 fail
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
 ```
+
+## Real data
+
+Put the Dwellsy trial exports in `data/real/chicago/` and `data/real/dc/`, either as the extracted CSV
+or as the original zip. `libs.real_data.raw_file("chicago")` finds them. Notebooks write intermediate
+files (samples, prepared data) to `data/processed/` and OpenStreetMap extracts to `data/osm/`. None of
+these are committed.
