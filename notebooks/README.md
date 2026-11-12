@@ -9,6 +9,8 @@ Phase 1 market rent analysis lives in `phase_01_market_rent/` and runs in order:
 3. `03_feature_selection_numerical.ipynb`
 4. `04_numerical_correlations.ipynb`
 5. `05_numerical_final_selection.ipynb` (after 04; applies your numerical decisions)
+6. `08_numerical_edav.ipynb` (after 04, independent of 05; explores numerical-variable distributions,
+   missingness, correlations, and monthly rent; writes `edav_summary.csv` and six PNG figures)
 
 Phase 2 planning notes live in `phase_02_price_recommendation/`. No Phase 2 code exists yet.
 
