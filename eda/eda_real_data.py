@@ -1,13 +1,18 @@
-"""
-For each market it prints data-quality checks and writes five plots:
+"""EDA for the real Dwellsy data.
+
+For each market it prints data-quality checks, writes five plots, and saves a feature table:
   01 rent over time (quarterly median + IQR, with listing counts)
   02 geography: median rent over lat/lon
   03 rent vs sqft: raw vs within-community
   04 same-unit rent change between consecutive listings
   05 partial dependence from a compact GBM (holdout = unseen communities)
+  feature_metrics.csv: per-feature Pearson, Spearman, mutual information (|r|-scaled),
+     within-community correlation, share of the feature's variance within a community,
+     and held-out permutation importance (dollars added to MAE when the feature is shuffled)
 """
 
 import sys
+import warnings
 from pathlib import Path
 
 import matplotlib
@@ -16,7 +21,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingRegressor
-from sklearn.inspection import partial_dependence
+from sklearn.feature_selection import mutual_info_regression
+from sklearn.inspection import partial_dependence, permutation_importance
 from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.model_selection import GroupShuffleSplit
 
@@ -31,6 +37,10 @@ except ImportError:
 
 OUT = REPO / "data" / "eda_real"
 RNG = 0
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+warnings.filterwarnings("ignore", message="An input array is constant")
+FEATS = ["square_feet", "bedrooms", "full_baths", "latitude", "longitude", "year_built",
+         "n_amenities", "top_down_community_count", "listing_t"]
 NICE = {"square_feet": "Square Feet", "listing_t": "Listing Date (Year)",
         "n_amenities": "Number of Amenities", "latitude": "Latitude"}
 START, END = "2021-01-01", "2026-10-01"  # skip the thin 2020 start and the partial current quarter
@@ -126,19 +136,27 @@ def p04_same_unit(df, out, mkt):
     save(fig, out, "04_same_unit_change.png")
 
 
-def p05_pdp(df, out, mkt):
+def prep(df):
+    """Add listing_t and trim the extreme 0.1% tails of rent."""
     d = df.copy()
     d["listing_t"] = d.creation_time.dt.year + (d.creation_time.dt.dayofyear - 1) / 365.25
-    d = d[d.rent_amount.between(*df.rent_amount.quantile([.001, .999]))]
-    d = d.sample(min(200_000, len(d)), random_state=RNG)
-    feats = ["square_feet", "bedrooms", "full_baths", "latitude", "longitude", "year_built",
-             "n_amenities", "top_down_community_count", "listing_t"]
-    X, y, grp = d[feats].astype("float64"), d.rent_amount, d.community_id
+    return d[d.rent_amount.between(*df.rent_amount.quantile([.001, .999]))]
+
+
+def fit_model(d):
+    """One compact GBM per market, tested on communities it never saw. Shared by plot 05 and the metrics table."""
+    s = d.sample(min(200_000, len(d)), random_state=RNG)
+    X, y, grp = s[FEATS].astype("float64"), s.rent_amount, s.community_id
     tr, te = next(GroupShuffleSplit(1, test_size=.2, random_state=RNG).split(X, y, grp))
     gbm = HistGradientBoostingRegressor(max_iter=200, learning_rate=.1, random_state=RNG).fit(X.iloc[tr], y.iloc[tr])
-    r2 = r2_score(y.iloc[te], gbm.predict(X.iloc[te]))
-    mae = mean_absolute_error(y.iloc[te], gbm.predict(X.iloc[te]))
+    pred = gbm.predict(X.iloc[te])
+    r2, mae = r2_score(y.iloc[te], pred), mean_absolute_error(y.iloc[te], pred)
     print(f"  compact GBM holdout (unseen communities): R2={r2:.2f}, MAE=${mae:,.0f}")
+    return {"gbm": gbm, "X": X, "y": y, "te": te, "r2": r2, "mae": mae}
+
+
+def p05_pdp(fit, out, mkt):
+    gbm, X, te = fit["gbm"], fit["X"], fit["te"]
     Xs = X.iloc[te].sample(min(4000, len(te)), random_state=RNG)
     fig, ax = plt.subplots(2, 2, figsize=(11, 8))
     for a, f in zip(ax.ravel(), ["square_feet", "listing_t", "n_amenities", "latitude"]):
@@ -149,7 +167,43 @@ def p05_pdp(df, out, mkt):
         a.set(xlabel=NICE[f], ylabel="Change in Predicted Rent ($)")
     fig.suptitle(f"Partial Dependence, Compact GBM, Holdout = Unseen Communities ({mkt})")
     save(fig, out, "05_partial_dependence.png")
-    return r2, mae
+
+
+def feature_metrics(d, fit, out, mkt):
+    """Per-feature table for the metrics slide."""
+    y, grp = d.rent_amount, d.community_id
+    rows = []
+    for f in FEATS:
+        x = d[f].astype("float64")
+        ok = x.notna()
+        x, yy, g = x[ok], y[ok], grp[ok]
+        if x.nunique() < 2:
+            rows.append({"feature": f})
+            continue
+        xd, yd = x - x.groupby(g).transform("mean"), yy - yy.groupby(g).transform("mean")
+        rows.append({"feature": f, "pearson": x.corr(yy), "spearman": x.corr(yy, method="spearman"),
+                     "within_r": xd.corr(yd) if xd.std() > 0 else np.nan,
+                     "pct_within": 100 * xd.var() / x.var()})
+    res = pd.DataFrame(rows).set_index("feature")
+
+    s = d.sample(min(30_000, len(d)), random_state=RNG)
+    Xs = s[FEATS].astype("float64")
+    Xs = Xs.fillna(Xs.median()).fillna(0)
+    res["mi_coef"] = np.sqrt(1 - np.exp(-2 * mutual_info_regression(Xs, s.rent_amount, random_state=RNG)))
+
+    Xte, yte = fit["X"].iloc[fit["te"]], fit["y"].iloc[fit["te"]]
+    sub = np.random.default_rng(RNG).choice(len(Xte), size=min(20_000, len(Xte)), replace=False)
+    pi = permutation_importance(fit["gbm"], Xte.iloc[sub], yte.iloc[sub],
+                                scoring="neg_mean_absolute_error", n_repeats=3, random_state=RNG)
+    res["perm_dMAE"] = pi.importances_mean
+
+    res = res[["pearson", "spearman", "mi_coef", "within_r", "pct_within", "perm_dMAE"]].sort_values(
+        "perm_dMAE", ascending=False)
+    print("  feature metrics (perm_dMAE = $ added to MAE when shuffled, on unseen communities):")
+    print(res.round(2).to_string())
+    out.mkdir(parents=True, exist_ok=True)
+    res.round(4).to_csv(out / "feature_metrics.csv")
+    print("  saved", out.name + "/feature_metrics.csv")
 
 
 def comparison(df, markets):
@@ -175,11 +229,14 @@ def main():
         p02_geo(d, out, m)
         r_raw, r_in = p03_sqft(d, out, m)
         p04_same_unit(d, out, m)
-        r2, mae = p05_pdp(d, out, m)
+        dd = prep(d)
+        fit = fit_model(dd)
+        p05_pdp(fit, out, m)
+        feature_metrics(dd, fit, out, m)
         rows.append({"market": m, "listings": len(d), "units": d.uru_id.nunique(),
                      "communities": d.community_id.nunique(), "median_rent": d.rent_amount.median(),
                      "median_sqft": d.square_feet.median(), "r_raw": round(r_raw, 2),
-                     "r_within": round(r_in, 2), "gbm_r2": round(r2, 2), "gbm_mae": round(mae)})
+                     "r_within": round(r_in, 2), "gbm_r2": round(fit["r2"], 2), "gbm_mae": round(fit["mae"])})
     print("\n=== Market Comparison ===")
     print(pd.DataFrame(rows).to_string(index=False))
     if len(markets) > 1:
