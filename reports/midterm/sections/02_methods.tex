@@ -1,15 +1,16 @@
 \section{Methods}\label{sec:methods}
 
+\revised{This section describes the synthetic and real data, how we prepared and explored them, how we
+selected variables, and the models and concession extractor we built.}
+
 \subsection{Data}\label{sec:data}
 
-The original project proposal described a prepared seed dataset covering two to three U.S. metro
-markets, roughly 10,000 to 20,000 buildings and 500,000 listing observations, together with
-concession text, property photos, and analyst-curated comparable sets. During our first meetings,
-however, we learned that the real data was not yet available and that we would begin with synthetic
-data. Following Accolade's guidance, the synthetic data was used for pipeline development and
-testing, not for model selection or tuning. The real Dwellsy listing data only arrived recently, leaving limited time for its analysis before this report. Nevertheless, we have started cleaning and exploring the Chicago data and conducted an initial comparison of predictive models. These results are preliminary and require further validation and refinement.\footnote{Accolade delivered a trial extract from Dwellsy, the listing provider, on October 22.
-It covers \dwListings{} listings of \dwUnits{} rental units in the Chicago and Washington, DC
-metropolitan areas between \dwStart{} and \dwEnd{}. Our initial analysis of the real data focuses on the Chicago metropolitan area.}
+\revised{The original project proposal described a prepared seed dataset covering two to three U.S. metro
+markets, roughly 10,000 to 20,000 buildings and 500,000 listing observations, with concession text,
+property photos, and analyst-curated comparable sets. In our first meetings, we learned that the
+real data was not yet available, so we began with synthetic data. As Accolade advised, we used the
+synthetic data to develop and test the pipeline, not to select or tune models. The real Dwellsy
+listing data arrived on October~22; we describe it at the end of this subsection.}
 
 The synthetic data was built to conform to the structure of the real data: a market-relative
 dataset, which mirrors the Dwellsy listings feed, and a demand pricing dataset, which mirrors a
@@ -28,7 +29,7 @@ organize these tables in three layers (\cref{fig:pipeline}):
   pricing policy.
 \end{description}
 
-The truth layer is what makes the synthetic data especially useful. A real listings feed only
+\revised{The truth layer makes the synthetic data especially useful.} A real listings feed only
 records what landlords asked, whereas this data also records what each unit was worth, so we can
 evaluate whether a method recovers the market rent rather than whether it simply reproduces the
 listings.
@@ -48,19 +49,28 @@ flexible model can score well partly by recovering the generator's own formula. 
 our synthetic results as evidence that a method works when the data behaves as assumed, not as a
 forecast of its accuracy on real listings.
 
+\revised{The real data is a trial extract from Dwellsy, the listing provider. It covers \dwListings{}
+listings of \dwUnits{} rental units in the Chicago and Washington, DC metropolitan areas between
+\dwStart{} and \dwEnd{}, with the same 47 variables in both markets. We analyze Chicago first:
+545,312 listings of 152,233 units, so a unit appears 3.6 times on average. The target is
+\texttt{rent\_amount}, the advertised monthly rent, which is never missing. The main predictors are
+the unit's bedrooms, bathrooms, and square footage, the building's year built and property type, its
+ZIP code and coordinates, and the listing date. Most are nearly complete, but year built is 32\%
+missing and half bathrooms 83\% missing. Unlike the synthetic data, the real data has no truth
+layer, so we can score models only against asking rent.}
+
 \subsection{Preprocessing}\label{sec:preprocessing}
 
-With three markets and millions of rows, our first challenge was deciding how to examine the data at
-all. We began by merging the \nMasterTables{} source tables relevant to rent prediction into a
+\revised{We first merged} the \nMasterTables{} source tables relevant to rent prediction into a
 master table with one row per listing, \nMasterRows{} listings by \nMasterCols{} columns. Building
 and floor-plan attributes join one-to-many, while a listing's price history and advertised specials
 are aggregated to the listing. Every join is checked for duplicated rows, and every column keeps the
 name of its source table (for example, \texttt{market\_building\_\_year\_built}), so its origin stays
-clear after any selection. We then reviewed each variable's data type and content, and standardized
-the formats into strings, floats, integers, dates, and booleans for consistent use in later analysis.
+clear after any selection. \revised{We then reviewed each variable's content and
+standardized its data type as a string, float, integer, date, or boolean.}
 
 A column's name, however, does not tell us whether it can be used. We therefore also tagged each
-column with a role (feature, label, latent, or leaky) and select inputs by role under a single rule:
+column with a role (feature, label, latent, or leaky) and \revised{selected} inputs by role under a single rule:
 an input must be known on the day the unit is listed. \Cref{fig:leakage} shows why this rule has to
 be enforced by role rather than by correlation. Nine columns are the listing's own later prices and
 correlate with asking rent at \(|r| \geq \minLeakyLevelR\), so they are easy to catch. Four more are
@@ -80,7 +90,13 @@ model given these columns would score almost perfectly and learn nothing~\autoci
   \label{fig:leakage}
 \end{figure}
 
-Once the real Dwellsy data became available, we began preprocessing the Chicago listings by removing observations with invalid or implausible values, handling missing data, and preparing the variables for modeling. The resulting dataset consists of 545,312 observations corresponding to 152,233 unique rental units. To avoid data leakage across repeated listings of the same unit, we split the data into training, validation, and test sets grouped by rental unit identifier.
+\revised{For the real Chicago listings, our checks for invalid values found only one, a listing with a
+non-positive square footage, so we kept every listing. We dropped half bathrooms and impute the
+remaining missing values inside the modeling pipeline, fitted on the training set only: medians for
+numerical variables and the most frequent value for categorical ones. Because units are listed
+repeatedly, we split the data by rental unit into training (64\%), validation (16\%), and test
+(20\%) sets. No unit appears in more than one set, so a model cannot score well by memorizing units
+it has already seen.}
 
 \subsection{Exploratory data analysis}\label{sec:eda}
 
@@ -90,16 +106,25 @@ which variables carry information about it. Median asking rent is \medRentDc{} i
 \firstYear{} and \lastYear{} it rose by \growthChicago{} in Chicago and \growthDc{} in DC, while in
 Dallas--Fort Worth it peaked in \dfwPeakYear{} and has since leveled off. Within each market, rent
 generally rises with the number of bedrooms, but the spread within each bedroom count is wide
-(\cref{fig:ladder}), which suggests that location and building characteristics matter as much as the
+(\cref{fig:ladder} \revised{in \cref{app:figures}}), which suggests that location and building characteristics matter as much as the
 size of the unit.
 
 Unit size shows why the building level matters. Across all listings, square footage has a Pearson
 correlation of \sqftOverallR{} with asking rent, but within a single building the correlation rises
 to \sqftWithinR{}. In other words, size explains rent much better once the building is held fixed,
-because buildings also differ in many other ways that affect price. On the other hand, several
-variables that look promising are often missing: \nSparseFees{} fee and parking variables have
+because buildings also differ in many other ways that affect price. \revised{Some promising variables,
+however, are mostly missing:} \nSparseFees{} fee and parking variables have
 Spearman correlations between \sparseRhoLo{} and \sparseRhoHi{} with rent, but are \sparseMissLo{} to
 \sparseMissHi{} missing.
+
+\revised{The real Chicago listings show the same building effect, though weaker: square footage
+correlates with asking rent at 0.51 across all listings and 0.65 within a community, so comparable
+selection should help on real data too. Two differences from the synthetic data matter for
+modeling. Median asking rent in Chicago stayed between about \$1,500 and \$1,830 per quarter from
+2021 to 2026, far flatter than the synthetic data's \growthChicago{} rise, so synthetic trends
+should not guide real-data choices. The number of listings per quarter also fell from about 50,000
+in 2021 to about 15,000 in 2025 and 2026, so most training data comes from the earliest years, and
+we will also test on the most recent period.}
 
 \begin{figure}[htbp]
   \centering
@@ -107,14 +132,6 @@ Spearman correlations between \sparseRhoLo{} and \sparseRhoHi{} with rent, but a
   \caption{Median asking rent by submarket. Each circle is one submarket, sized by its number of
   listings and colored on one scale across the three markets.}
   \label{fig:map}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics{rent_ladder}
-  \caption{Asking rent by unit size. Dots mark the median, thick bars the middle half of listings,
-  and thin lines the 10th to 90th percentile.}
-  \label{fig:ladder}
 \end{figure}
 
 \subsection{Feature selection}\label{sec:selection}
@@ -130,11 +147,10 @@ variable with Gini, gradient boosting importance, and Lasso, and kept \nKeptNume
 sequence, narrowing 65 numerical predictors to 44 and then 18. The two selections agree on ten core
 variables, led by unit size (Spearman correlation of \sqftSpearman{} with rent) together with
 location, the building's amenity count and review score, its leasing exposure when the unit was
-listed, and three measures of how often the building changes its prices. We also profiled the 215
-boolean and 28 categorical predictors against the target.
+listed, and three measures of how often the building changes its prices.
 
-For the categorical variables, we found that cardinality has to be judged per building rather than
-per row. A street address is only 0.31\% distinct across listings but 99.97\% distinct across
+\revised{For the categorical variables, we first profiled the 215 boolean and 28 categorical predictors
+against the target. We found that cardinality has to be judged per building rather than per row.} A street address is only 0.31\% distinct across listings but 99.97\% distinct across
 buildings, so it is effectively a building identifier rather than a category. We therefore excluded
 identifiers and chose which categorical variables to keep based on their importance on buildings the
 model had not seen. Six of the \nCatCandidates{} candidates are kept: property class, ZIP code, floor
@@ -156,13 +172,13 @@ scikit-learn's histogram-based gradient boosting~\autocite{ke2017lightgbm, pedre
 handles them natively. As a reference point, we also include a naive baseline that predicts the
 median rent for the listing's market and bedroom count. \Cref{app:models} lists the settings.
 
-Using the recently received Dwellsy data, we also ran an initial comparison of five 
-regression models on the Chicago listings: linear regression, decision tree, random
-forest, histogram-based gradient boosting, and a dummy regressor as a baseline. At 
-this stage, the models use eight predictors describing unit characteristics,
-location, and listing date. We evaluated performance on a validation set made up of
-rental units that were not used for training. These results provide an initial benchmark
-for further model development and evaluation.
+\revised{On the real Chicago listings, we compared five regression models: linear regression, a decision
+tree, a random forest, histogram-based gradient boosting, and a baseline that predicts the mean
+training rent. They use eight predictors: bedrooms, full bathrooms, square footage, year built, ZIP
+code, property type, and the listing's year and month, with ZIP code and property type one-hot
+encoded. We compare the models on the validation set and keep the test set for the final model. To
+test whether exact location adds information beyond ZIP code, we also fit a Ridge regression with
+spline transformations of latitude and longitude.}
 
 \subsection{Concession extraction}\label{sec:concession-methods}
 

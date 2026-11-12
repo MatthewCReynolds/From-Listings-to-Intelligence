@@ -1,5 +1,10 @@
 \section{Preliminary results}\label{sec:results}
 
+\revised{This section reports our results.
+\Cref{sec:evaluation,sec:market-rent,sec:errors,sec:drivers,sec:concessions,sec:pipeline} cover the
+synthetic data, where the truth layer lets us score predictions against the true market rent.
+\Cref{sec:real-results} gives our first results on the real Chicago listings.}
+
 \subsection{Evaluation}\label{sec:evaluation}
 
 We evaluate every model on buildings it has never seen. Listings are split by building,
@@ -12,9 +17,12 @@ error,
 \]
 which reads directly as a typical miss, compares fairly across markets with different rent levels,
 and is not dominated by the few luxury units with the largest dollar errors. We also report the mean
-absolute error (MAE) in dollars and \(R^2\). Additionally, we score each model twice: against the
+absolute error (MAE) in dollars and \(R^2\). \revised{We also score} each model twice: against the
 asking rent it was trained to predict, and against the generator's true market rent for the same
-floor plan and month, a comparison that only synthetic data allows.
+floor plan and month, a comparison that only synthetic data allows. \revised{On the real Chicago
+data, models are evaluated on held-out rental units. That data has no truth layer, so we compare
+models by MAE, \(R^2\), and the root mean squared error (RMSE), which penalizes large misses more
+heavily. We will add MdAPE so that the two datasets can be compared directly.}
 
 \subsection{Market rent}\label{sec:market-rent}
 
@@ -29,9 +37,9 @@ The last row of \cref{tab:models} is the most informative. A listing's own askin
 \noiseFloor{} of the true market rent, which means asking rent is a reliable training target, and
 each model's error against the true rent (\gbmMdapeTrue{} for gradient boosting) matches its error
 against the asking rent. The remaining error therefore does not come from noise in the listings. It
-comes from information about each building that our \nFeatures{} variables do not capture, and
-comparable buildings nearby carry exactly that information, which is why comparable-property
-selection is our next step.
+comes from information about each building that our \nFeatures{} variables do not capture.
+\revised{Nearby comparable buildings carry that information, which is why comparable-property selection
+is our next step.}
 
 \begin{table}[htbp]
   \caption{Performance on \nTestBuildings{} held-out buildings (\nTestListings{} listings). MdAPE is
@@ -110,42 +118,39 @@ offering free months reach \concMonthsFree{}.
 
 All of our code and outputs are shared through the team's GitHub repository. Three commands rebuild
 the master table from the public download, and 59 join checks verify that the merged table is
-complete and consistent. The synthetic-data results in this report are generated from the
-same code: every number, table, and figure related to that analysis is recomputed from the data,
-keeping the report consistent with the models behind it.
+complete and consistent. \revised{The same code recomputes every
+synthetic-data number, table, and figure in this report from the data, so the report stays
+consistent with the models behind it.}
 
 
 \subsection{Preliminary results on real Dwellsy data}\label{sec:real-results}
 
-We started by evaluating five models using property characteristics, ZIP codes, and temporal
-information. \Cref{tab:real-models} summarizes their validation performance.
+\revised{\Cref{tab:real-models} compares the five models on the Chicago validation set.}
 
 \begin{table}[htbp]
-  \centering
-  \caption{Preliminary validation performance on real Chicago rental listings.}
+  \caption{\revised{Preliminary performance on real Chicago listings, measured on the validation set
+  (rental units held out from training).}}
   \label{tab:real-models}
-  \begin{tabular}{lrrr}
-    \hline
-    Model & MAE (\$) & RMSE (\$) & $R^2$ \\
-    \hline
-    Gradient Boosting & 229.22 & 396.24 & 0.8331 \\
-    Random Forest & 291.17 & 464.58 & 0.7706 \\
-    Linear Regression & 334.62 & 551.74 & 0.6764 \\
-    Decision Tree & 345.79 & 533.11 & 0.6979 \\
-    Dummy Regressor & 668.83 & 969.97 & -0.0002 \\
-    \hline
-  \end{tabular}
+  \centering\small
+  \revised{\begin{tabular}{@{}lrrr@{}}
+    \toprule
+    Model & MAE (\$) & RMSE (\$) & \(R^2\) \\
+    \midrule
+    \textbf{Gradient boosting} & 229 & 396 & 0.83 \\
+    Random forest & 291 & 465 & 0.77 \\
+    Linear regression & 335 & 552 & 0.68 \\
+    Decision tree & 346 & 533 & 0.70 \\
+    Baseline (mean training rent) & 669 & 970 & 0.00 \\
+    \bottomrule
+  \end{tabular}}
 \end{table}
 
-Gradient Boosting resulted in the strongest preliminary model, achieving the lowest prediction
-errors and the highest R-squared on the validation set. These initial findings suggest that
-nonlinear models are better suited to capturing relationships among rental prices, property
-characteristics, and location. However, we still need to refine these models and explore other
-alternatives before selecting a final approach.
+\revised{Gradient boosting performs best, with an MAE of \$229 and an \(R^2\) of 0.83, against \$669 and
+0.00 for the baseline. As on the synthetic data, it beats linear regression and a single decision
+tree, and the random forest comes second. The two tree ensembles outperform the simpler models,
+which suggests that rent depends on interactions between unit characteristics and location. We will
+tune these models and test others before choosing one.}
 
-We also developed a Ridge regression model incorporating nonlinear spline transformations of
-latitude and longitude to assess whether geographic coordinates provide additional predictive
-information beyond ZIP codes. Adding these variables reduced validation MAE by approximately
-\$1.78 and increased R-squared by 0.0024 compared with the model without coordinates. Although
-the improvement was relatively small, this analysis provided an initial assessment of the
-geographic component of rental prices.
+\revised{The Ridge regression tests whether exact location adds information beyond ZIP code. Adding spline
+transformations of latitude and longitude lowered validation MAE by only \$1.78 and raised \(R^2\) by
+0.0024, so in this model ZIP code already captures most of the location signal.}

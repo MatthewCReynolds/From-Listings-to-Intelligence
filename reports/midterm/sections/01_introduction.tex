@@ -1,18 +1,20 @@
 \section{Introduction}\label{sec:intro}
 
+\revised{This section describes Accolade's pricing problem, reviews related work, defines the Phase~1
+task, and outlines our approach.}
+
 \subsection{Motivation and business problem}
 
-Accolade is a property management platform that is seeking to expand its product offerings by
-adding a revenue management product. The goal is to help property owners price their units
+\revised{Accolade, a property management platform, is adding a revenue management product to its
+offerings.} The goal is to help property owners price their units
 correctly: an apartment priced too low leaves revenue on the table, while one priced too high sits
 vacant, and every vacant day is rent the owner does not recover.
 
-Setting the right price depends on what comparable units are asking right now, and identifying that
-competitive set is an important challenge in itself. Geographic proximity alone may not be
-sufficient, since unit characteristics, amenities, building quality, concessions, fees, and other
-factors also affect how a unit is priced.
+\revised{The right price depends on what comparable units are asking now, and finding those comparables is
+a challenge in itself. Nearby units are not always comparable, because unit characteristics,
+amenities, building quality, concessions, and fees also affect price.}
 
-Throughout this report it is also important to distinguish three rents. The asking rent is
+\revised{This report distinguishes three rents.} The asking rent is
 the price posted on a listing. The effective rent is the asking rent less any concessions,
 such as a free month, spread over the lease:
 \[
@@ -21,7 +23,7 @@ such as a free month, spread over the lease:
 The market rent is what a unit is actually worth given the market around it. Accolade's
 product aims to estimate the third from listings that only show the first.
 
-Following Accolade's Draft Project Plan, the product is being built in two phases. The first, a
+\revised{Accolade's Draft Project Plan builds the product in two phases.} The first, a
 market rent estimate, determines what comparable properties are currently asking for a given
 unit type. The second, a dynamic price recommendation, determines the asking price a property
 should post today based on its current price, demand relative to its occupancy target, comparable
@@ -36,36 +38,36 @@ approach in more recent work, each member of the team reviewed a paper covering 
 technique, the effects of algorithm-based pricing, or the measurement of rental markets from
 listing data.
 
-A study of residential property valuation in Germany compared an expert function for selecting
-comparable properties with hedonic models (OLS and GAM) and XGBoost, and found that XGBoost achieved
-the best predictive performance~\autocite{stang2023human}. Work on automating real estate
-appraisals similarly treats comparable-property selection as the baseline that learned models must
-beat~\needcite{automated appraisal study}. Other studies show the value of richer inputs: a
-Melbourne study combined text, image, and geospatial embeddings~\needcite{Melbourne study}, a São
+\revised{A study of residential property valuation in Germany treated comparable-property selection as the
+baseline that learned models must beat: it compared an expert function for selecting comparable
+properties with hedonic models (OLS and GAM) and XGBoost, and found that XGBoost predicted
+best~\autocite{stang2023human}.} Other studies show the value of richer inputs: a
+Melbourne study combined text, image, and geospatial embeddings~\autocite{hasan2024multimodal}, a São
 Paulo study paired location-based features with natural language processing of listing
 descriptions~\autocite{maia2024machine}, and a reproducible study of the major Spanish markets used
-machine learning to identify spatial market segments~\needcite{Spanish markets study}. Finally,
-Zillow's home value index methodology shows how values can be measured consistently from listings
-over time~\needcite{Zillow ZHVI methodology}, while a review of algorithmic pricing in the American
-rental market examined its effects with two-way fixed effects (TWFE) models~\autocite{calderwang2026algorithmic}.
+machine learning to identify spatial market segments~\autocite{reyblanco2024using}. Finally,
+Zillow's home value index methodology shows how \revised{to measure values consistently over
+time}~\autocite{olsen2023zhvi}, while a \revised{study of algorithmic pricing in U.S. multifamily rentals
+estimated} its effects with two-way fixed effects (TWFE) models~\autocite{calderwang2026algorithmic}.
 
 These ideas map directly onto Accolade's data: automated comparable selection onto the platform's
 suggested comparables, image embeddings onto its listing photos and quality scores, and time-based
-validation onto its daily price series. They also shaped the models we consider, from hedonic
+validation onto its daily price series. \revised{They also guide our choice of models}, from hedonic
 regression to Random Forest, XGBoost, and stacked ensembles.
 
 \subsection{Problem statement}
 
 The technical goal of Phase~1 is to estimate the asking rent of a unit type, defined by its
-bedrooms, bathrooms, and a square-footage band, as a point estimate together with a range. Two
-requirements attach to every estimate. First, the range is required rather than optional, and it
-must be reported with the number of comparables or observations behind it. Second, every price must
+bedrooms, bathrooms, and a square-footage band, as a point estimate together with a range. \revised{Every
+estimate must meet two requirements. First, it must include its range and the number of comparables
+or observations behind it.} Second, every price must
 be explainable in terms of which comparables were used, which adjustments were applied, and which
-limits bound the result. Net effective rent is a derived second output rather than the first target,
-and it will be produced once concessions can be reliably extracted from listing text.
+limits bound the result. \revised{Net effective rent is a second, derived output,
+which we will produce once concessions can be reliably extracted from listing text.}
 
-This report covers the Phase~1 modeling completed so far and the first component of Phase~2, the
-extraction of concession terms from advertised specials.
+This report covers the Phase~1 modeling completed so far\revised{, our first models on real Dwellsy
+listings,} and the first component of Phase~2, the extraction of concession terms from advertised
+specials.
 
 \subsection{Overview}
 
@@ -73,7 +75,8 @@ extraction of concession terms from advertised specials.
 into a single master table with one row per listing, screened its variables for information that is
 not available when a unit is listed, scored the remaining variables, and trained and compared models
 on buildings held out from training. The generator's truth layer is used only to evaluate the
-predictions, never as an input. \Cref{sec:methods} describes the data, preprocessing, exploratory
+predictions, never as an input. \revised{We have begun applying the same approach to real Dwellsy
+listings from Chicago.} \Cref{sec:methods} describes the data, preprocessing, exploratory
 analysis, and methods; \cref{sec:results} presents our preliminary results; and
 \cref{sec:discussion} discusses our conclusions and next steps.
 

@@ -123,3 +123,7 @@
 % A source the team has read but not yet entered in refs.bib. Shows in the final
 % build too, as [?], so a missing reference can never slip through unnoticed.
 \newcommand{\needcite}[1]{\ifdraft\textcolor{brick}{\sffamily\footnotesize[cite: #1]}\else[?]\fi}
+% \revised{text}: a revision for the team to review. Blue in the draft, black in the final copy.
+% Once a change is accepted, delete the \revised{ } wrapper and keep the text.
+\definecolor{revblue}{HTML}{0B57D0}
+\NewDocumentCommand{\revised}{+m}{{\leavevmode\ifdraft\color{revblue}\fi#1}}
