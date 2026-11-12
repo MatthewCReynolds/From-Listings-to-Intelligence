@@ -1,0 +1,46 @@
+\section{Model settings}\label{app:models}
+
+All models use the \nFeatures{} inputs listed in \cref{sec:models} and the same split: listings are
+grouped by building, and 20\% of buildings are held out for testing (scikit-learn's
+\texttt{GroupShuffleSplit}, seed 710).
+
+\begin{description}[leftmargin=1.5em, labelindent=0pt, font=\normalfont\bfseries]
+  \item[Naive baseline] the median asking rent of the training listings in the same market and
+  bedroom count.
+  \item[Linear regression] ordinary least squares, after median imputation of missing values.
+  \item[Decision tree] maximum depth 10, at least 20 listings per leaf, after median imputation.
+  \item[Gradient boosting] histogram-based gradient boosting with 100 iterations, at most 31 leaves
+  per tree, and a learning rate of 0.1; missing values are handled natively.
+\end{description}
+
+\section{Additional figures}\label{app:figures}
+
+\revised{This appendix holds three figures referenced in the main text: asking rent by unit size, the
+variable selection funnel, and the concession extraction results.}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{rent_ladder}
+  \caption{Asking rent by unit size. Dots mark the median, thick bars the middle half of listings,
+  and thin lines the 10th to 90th percentile.}
+  \label{fig:ladder}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{funnel}
+  \caption{From every column to the model's inputs. Most columns known at listing time but not yet
+  scored are the \nKnownBoolean{} amenity flags. The \nKept{} kept so far are \nKeptNumeric{}
+  numerical and \nKeptCategorical{} categorical.}
+  \label{fig:funnel}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{concessions}
+  \caption{Rule-based concession extraction on \concN{} specials that state their terms. (a)~Strong
+  on text written by a language model, weaker on the generator's template text, which quotes dollars
+  where the truth records months free. (b)~Every dollar-denominated special is read correctly; months
+  free reach \concMonthsFree{}.}
+  \label{fig:concessions}
+\end{figure}

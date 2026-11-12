@@ -1,0 +1,129 @@
+% ---------------------------------------------------------------------------
+%  Preamble. Compile with LuaLaTeX (make, or latexmk). Writers need not touch it.
+% ---------------------------------------------------------------------------
+
+% Page -----------------------------------------------------------------------
+\usepackage[letterpaper, margin=1in]{geometry}
+\linespread{1.04}
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
+\raggedbottom
+
+% Type: Libertinus, the successor of the Libertine face ACM uses -------------
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{Libertinus Serif}[Numbers={Proportional,Lining}]
+\setsansfont{Libertinus Sans}
+\setmonofont{Libertinus Mono}[Scale=MatchLowercase]
+\setmathfont{Libertinus Math}
+\usepackage[final, protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+
+% Colour, for figures and drafting aids only --------------------------------
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{1F6FA8}
+\definecolor{brick}{HTML}{B03E26}
+\definecolor{ink}{HTML}{15202A}
+\definecolor{ink2}{HTML}{4E6273}
+\definecolor{rulecolor}{HTML}{C9D4DC}
+\definecolor{wash}{HTML}{F3F6F8}
+
+% Headings: serif, black, numbered in the usual way -------------------------
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}[runin]{\normalfont\normalsize\itshape}{}{0pt}{}[.]
+\titlespacing*{\section}{0pt}{1.5em plus 0.4em minus 0.2em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.1em plus 0.3em minus 0.2em}{0.45em}
+\titlespacing*{\subsubsection}{0pt}{0.6em plus 0.2em}{0.5em}
+
+% Page numbers centred at the foot, no running head -------------------------
+\pagestyle{plain}
+
+% Figures, tables, captions -------------------------------------------------
+\usepackage{graphicx}
+\graphicspath{{generated/figures/}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning}
+\usepackage{booktabs}
+\setlength{\aboverulesep}{0.4ex}
+\setlength{\belowrulesep}{0.65ex}
+\usepackage{siunitx}
+\sisetup{group-separator={,}, group-minimum-digits=4, detect-all}
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf, labelsep=period, justification=justified,
+  singlelinecheck=true, skip=6pt}
+\captionsetup[table]{position=top, skip=4pt}
+\usepackage{subcaption}
+\usepackage{float}
+% Floats never appear before the text that introduces them (flafter), never
+% drift past the next section heading (placeins), and float pages start at the top.
+\usepackage{flafter}
+\usepackage[section]{placeins}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{14pt plus 1fil}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+\setlength{\textfloatsep}{14pt plus 3pt minus 3pt}
+\setlength{\floatsep}{12pt plus 2pt minus 2pt}
+\setlength{\intextsep}{12pt plus 2pt minus 2pt}
+
+% Lists, notes ---------------------------------------------------------------
+\usepackage{enumitem}
+\setlist{itemsep=0.1em, topsep=0.3em, leftmargin=1.5em}
+\usepackage[bottom]{footmisc}
+
+% Citations and cross-references --------------------------------------------
+\usepackage[style=numeric-comp, sorting=none, maxbibnames=4, giveninits=true,
+  url=false, doi=true, backend=biber]{biblatex}
+\addbibresource{refs.bib}
+\renewcommand*{\bibfont}{\small}
+\usepackage[hidelinks, pdftitle={Midterm Report: From Listings to Intelligence},
+  pdfauthor={Team 24, Columbia University}]{hyperref}
+\usepackage[capitalise, noabbrev]{cleveref}
+
+% Title block: centred title, team, date, as in the sample report -----------
+\newcommand{\titleblock}[3]{%
+  \thispagestyle{plain}%
+  \begin{center}
+    {\LARGE #1\par}
+    \vspace{0.9em}
+    {\normalsize #2\par}
+    \vspace{0.6em}
+    {\normalsize #3\par}
+  \end{center}
+  \vspace{0.4em}}
+
+% Abstract: the standard article form, centred heading and a narrower measure
+\renewenvironment{abstract}
+  {\begin{center}\small\bfseries Abstract\end{center}\vspace{-0.5em}%
+   \begin{list}{}{\setlength{\leftmargin}{3em}\setlength{\rightmargin}{3em}}\item\relax\small}
+  {\end{list}\vspace{0.6em}}
+
+% Drafting aids. \draftfalse (or `make final`) removes every brief and marker.
+\newif\ifdraft \drafttrue
+\usepackage[most]{tcolorbox}
+\newtcolorbox{briefbox}[1]{enhanced, breakable, sharp corners, boxrule=0pt,
+  colback=wash, left=7pt, right=7pt, top=5pt, bottom=5pt, before skip=6pt, after skip=8pt,
+  fontupper=\sffamily\footnotesize\color{ink2}, title={#1}, coltitle=ink2,
+  fonttitle=\sffamily\scriptsize\bfseries, colbacktitle=wash,
+  attach title to upper, after title={\par\smallskip}}
+% \brief{owner}{pages}{what to cover}
+\newcommand{\brief}[3]{\ifdraft\begin{briefbox}{\MakeUppercase{Writing brief · #1 · #2}}#3\end{briefbox}\fi}
+% \figslot{key}{what the figure shows}{height}{note}: holds a figure's place, label fig:key
+\newcommand{\figslot}[4]{%
+  \begin{figure}[htbp]\centering
+  \begin{tcolorbox}[enhanced, sharp corners, colback=white, boxrule=0pt, height=#3, valign=center,
+    halign=center, borderline={0.6pt}{0pt}{rulecolor, dashed}]
+  {\sffamily\footnotesize\color{ink2}\textbf{Figure to come.}\enspace #4}
+  \end{tcolorbox}
+  \caption{\textcolor{ink2}{Placeholder: #2.}}\label{fig:#1}\end{figure}}
+\newcommand{\todo}[1]{\ifdraft\textcolor{brick}{\sffamily\footnotesize[#1]}\fi}
+% A source the team has read but not yet entered in refs.bib. Shows in the final
+% build too, as [?], so a missing reference can never slip through unnoticed.
+\newcommand{\needcite}[1]{\ifdraft\textcolor{brick}{\sffamily\footnotesize[cite: #1]}\else[?]\fi}
+% \revised{text}: a revision for the team to review. Blue in the draft, black in the final copy.
+% Once a change is accepted, delete the \revised{ } wrapper and keep the text.
+\definecolor{revblue}{HTML}{0B57D0}
+\NewDocumentCommand{\revised}{+m}{{\leavevmode\ifdraft\color{revblue}\fi#1}}

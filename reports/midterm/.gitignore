@@ -1,0 +1,15 @@
+build/
+*.aux
+*.log
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+# Local cache of held-out predictions (1.6 MB, rewritten on every run). Figures read
+# aggregates from generated/data/*.csv instead, so nothing committed depends on it.
+generated/data/test_predictions.parquet
+__pycache__/

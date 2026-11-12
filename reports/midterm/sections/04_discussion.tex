@@ -1,0 +1,51 @@
+\section{Discussion}\label{sec:discussion}
+
+\revised{This section summarizes what we have learned so far and the work that follows from it.}
+
+\subsection{Conclusion}
+
+Working with synthetic data allowed us to build and test a complete pipeline for the market rent
+estimate before the real data arrived. We built a listing-level master table, protected it against
+leakage by selecting variables by role, and trained models on held-out buildings. Gradient boosting
+provides a working baseline that cuts the error of a simple benchmark by \errorReduction{}. Because
+the synthetic data records the true market rent, we could also show that the remaining error is not
+noise in the listings but missing information about each building. Finally, we found that
+concession types are already recorded, so the work in concession extraction lies in recovering their
+value. 
+
+\revised{These synthetic results do not represent real market conditions and must be confirmed on real
+listings. Our first models on the real Chicago data point the same way: gradient boosting is again
+the strongest model, with a validation \(R^2\) of 0.83, but it still needs tuning and a final
+evaluation on the held-out test set.}
+
+\subsection{Future Work}
+
+\revised{Our next steps through the end of the semester in early December follow from these results. The
+dates in parentheses are our targets.}
+\begin{itemize}
+  \item \textbf{Real data \revised{(November)}.} \revised{Our next priority is the real
+  Chicago data. We will refine the models, add features such as amenities and categorical variables,
+  and report the median absolute percentage error so the results compare with our synthetic ones.}
+  \item \textbf{Combined variables \revised{(mid-November)}.} We will merge the numerical and categorical
+  variables under the same exclusion rules, starting with property class, \revised{which the class
+  bias in \cref{fig:segments} suggests the model is missing,} and train with cross-validation grouped
+  by property.
+  \item \textbf{Comparable-property selection \revised{(mid-November)}.} Since the remaining
+  error reflects missing information about each building, we will build the comparable-property
+  baseline described in Accolade's plan, using similarity in location, quality, size, vintage, and
+  amenities, and compare our models against it.
+  \item \textbf{Additional models \revised{(late November)}.} \revised{Tree ensembles performed best on both
+  datasets, so we will tune gradient boosting and Random Forest with Optuna~\autocite{akiba2019optuna},
+  test XGBoost and LightGBM, and consider stacking them.}
+  \item \textbf{Ranges and explanations \revised{(late November)}.} Every estimate needs a range and
+  its reasons, so we will add quantile or conformal prediction
+  intervals~\autocite{angelopoulos2023gentle}, report their coverage, and explain predictions with
+  SHAP values~\autocite{lundberg2017unified}. Accolade has also asked for an interpretable model,
+  which we will weigh against predictive performance.
+  \item \textbf{Phase 2 \revised{(early December)}.} We will continue with concession extraction and the
+  demand-based price recommendation, for which we are considering survival models such as Random
+  Survival Forests~\autocite{ishwaran2008random} and DeepSurv~\autocite{katzman2018deepsurv}.
+  \item \textbf{Evaluation \revised{(early December)}.} We will report the median absolute percentage error by
+  unit type and market, interval coverage, and performance on a later time period\revised{, and
+  evaluate the final model once on the held-out test set}.
+\end{itemize}

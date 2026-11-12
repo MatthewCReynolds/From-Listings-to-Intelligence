@@ -1,0 +1,44 @@
+% From Listings to Intelligence: midterm report.
+% Build: `make` (draft, with writing briefs) or `make final` (clean copy).
+\documentclass[11pt, letterpaper]{article}
+\input{preamble}
+\input{generated/numbers}
+\ifdefined\finalbuild \draftfalse \fi
+
+\begin{document}
+
+\titleblock
+  {Midterm Report: From Listings to Intelligence}
+  {Team 24: Maria Gonzalez Llama (mgg2173), Viviana Hanampa Castillo (vsh2108),\\
+   Shikha Mehta (sjm2291), Matthew Reynolds (mcr2235), Lady Infante Acosta (ldi2101)}
+  {\today}
+
+\begin{abstract}
+\revised{Accolade, a property management platform, is building a revenue management product that helps
+owners price their units: a unit priced too low loses revenue, and one priced too high sits vacant.
+This report covers the product's first phase, a market rent estimate. Because the real listing data
+was not yet available when we started, we built and tested our pipeline on a synthetic dataset from
+Accolade that mirrors the structure of the real data and also records the true market rent behind
+every listing. We merged \nMasterTables{} of its \nSourceTables{} tables into a master table of
+\nMasterRows{} listings, separated the variables known when a unit is listed from those that reveal
+its price, and trained models on \nTrainBuildings{} buildings before testing them on
+\nTestBuildings{} others. Gradient boosting predicts asking rent with a median absolute percentage
+error of \gbmMdape{}, against \baseMdape{} for a simple baseline. Asking rent sits within
+\noiseFloor{} of the true market rent, so most of the remaining error comes from building
+information our variables do not capture, which motivates the comparable-property selection we plan
+next. On the first real Dwellsy listings from Chicago, gradient boosting is again the strongest
+model, with a validation \(R^2\) of 0.83.}
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_methods}
+\input{sections/03_results}
+\input{sections/04_discussion}
+\input{sections/05_contributions}
+
+\printbibliography[heading=bibintoc, title={References}]
+
+\appendix
+\input{sections/appendix}
+
+\end{document}
