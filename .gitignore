@@ -1,8 +1,10 @@
-# Data files — too large for git (869 MB zip, 1.6 GB unpacked)
-data/*
-!data/.gitkeep
-!data/README.md
-!data/master_columns.csv
+# Data files: too large for git. Each track keeps its local data in <track>/data/
+real/data/*
+!real/data/README.md
+synthetic/data/*
+!synthetic/data/.gitkeep
+!synthetic/data/README.md
+!synthetic/data/master_columns.csv
 
 # Python
 __pycache__/
@@ -15,4 +17,4 @@ venv/
 .DS_Store
 
 # Per-row extraction debug output: 14 MB, regenerates in ~4 s
-outputs/synthetic/01_phase_02_concession_extraction_rows.csv
+synthetic/outputs/01_phase_02_concession_extraction_rows.csv
