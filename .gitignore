@@ -18,3 +18,6 @@ venv/
 
 # Per-row extraction debug output: 14 MB, regenerates in ~4 s
 synthetic/outputs/01_phase_02_concession_extraction_rows.csv
+
+# Model outputs
+real/outputs/models/**
